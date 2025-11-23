@@ -1,0 +1,86 @@
+<p-toast></p-toast>
+
+<div class="min-h-screen pt-20 px-6 bg-gray-50">
+  <div class="max-w-8xl mx-auto bg-white shadow-lg rounded-xl p-6">
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">Business Member List</h2>
+      <button pButton type="button" label="Add Member" icon="pi pi-plus" class="p-button-success"
+        (click)="openAddDialog()"></button>
+    </div>
+    <app-search-date-filter>
+
+    </app-search-date-filter>
+
+
+    <div class="overflow-x-auto">
+      <p-table [value]="members" [paginator]="true" [rows]="5"
+        class="p-datatable-striped p-datatable-gridlines min-w-full rounded-lg">
+        <ng-template pTemplate="header">
+          <tr class="bg-gray-800 text-white uppercase text-sm">
+            <th>ID</th>
+            <th>Business</th>
+            <th>User</th>
+            <th>Role</th>
+            <th>Joined At</th>
+            <th>Action</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-member>
+          <tr class="hover:bg-gray-50 transition duration-150">
+            <td>{{ member.id }}</td>
+            <td>{{ member.business_id }}</td>
+            <td>{{ member.user_id }}</td>
+            <td>
+              <span class="px-3 py-1 rounded-full text-xs font-semibold" [ngClass]="{
+                      'bg-green-500 text-white': member.role_id === 'Admin',
+                      'bg-blue-500 text-white': member.role_id === 'Manager',
+                      'bg-gray-200 text-gray-800': member.role_id === 'User'
+                    }">
+                {{ member.role_id }}
+              </span>
+            </td>
+            <td>{{ member.joined_at | date:'short' }}</td>
+            <td class="flex gap-2">
+              <button pButton type="button" class="p-button-sm p-button-warning"
+                (click)="openEditDialog(member)">Edit</button>
+              <button pButton type="button" class="p-button-sm p-button-danger"
+                (click)="deleteMember(member)">Delete</button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+
+  <p-dialog header="{{ isAddMode ? 'Add Member' : 'Edit Member' }}" [(visible)]="dialogVisible" [modal]="true"
+    [closable]="true" [style]="{ width: '400px' }" class="rounded-xl">
+    <div class="p-fluid space-y-4">
+      <div class="field">
+        <label class="font-medium text-gray-700">Business ID</label>
+        <input type="number" pInputText [(ngModel)]="editingMember.business_id" />
+      </div>
+      <div class="field">
+        <label class="font-medium text-gray-700">User ID</label>
+        <input type="number" pInputText [(ngModel)]="editingMember.user_id" />
+      </div>
+      <div class="field">
+        <label class="font-medium text-gray-700">Role</label>
+        <select pInputText [(ngModel)]="editingMember.role_id" class="p-inputtext p-component w-full">
+          <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+        </select>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-3 w-full">
+        <button pButton type="button" label="Cancel" icon="pi pi-times" class="p-button-secondary"
+          (click)="dialogVisible=false"></button>
+        <button pButton type="button" label="Save" icon="pi pi-check" class="p-button-success"
+          (click)="saveMember()"></button>
+      </div>
+    </ng-template>
+  </p-dialog>
+</div>

@@ -1,0 +1,73 @@
+<div class="flex justify-center items-center min-h-screen p-6 bg-gray-100">
+
+  <div class="bg-white shadow-xl rounded-3xl p-8 w-full max-w-sm mx-auto text-center transform transition-transform hover:scale-105 hover:shadow-2xl">
+    <h2 class="text-3xl font-extrabold text-gray-800 mb-1">{{ userProfile.user_id }}</h2>
+    <p class="text-gray-500 text-sm mb-6">{{ userProfile.email }}</p>
+
+
+    <div class="text-left text-gray-700 space-y-2 px-4">
+      <p><span class="font-semibold">Address:</span> {{ userProfile.address }}</p>
+      <p><span class="font-semibold">City:</span> {{ userProfile.city }}</p>
+      <p><span class="font-semibold">Country:</span> {{ userProfile.country }}</p>
+      <p><span class="font-semibold">Postal Code:</span> {{ userProfile.postal_code }}</p>
+      <p><span class="font-semibold">Date of Birth:</span> {{ userProfile.date_of_birth | date:'longDate' }}</p>
+    </div>
+
+
+    <div class="mt-6 px-4">
+      <button pButton type="button" label="Edit Profile" class="w-full p-button-success" (click)="openProfileModal()"></button>
+    </div>
+  </div>
+
+</div>
+
+
+<p-dialog 
+    header="Edit Profile" 
+    [(visible)]="showProfileModal" 
+    [modal]="true" 
+    [closable]="true" 
+    [style]="{width: '450px'}" 
+    [contentStyle]="{'padding': '2rem'}" 
+    [baseZIndex]="10000"
+    [breakpoints]="{'960px':'90vw', '640px':'95vw'}"
+    class="rounded-2xl shadow-2xl"
+>
+
+  <form [formGroup]="profileForm" class="space-y-4 text-gray-700">
+
+    <div class="p-field flex flex-col">
+      <label for="address" class="font-semibold mb-1">Address</label>
+      <input id="address" type="text" pInputText formControlName="address"
+             class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+    </div>
+
+    <div class="p-field flex flex-col">
+      <label for="city" class="font-semibold mb-1">City</label>
+      <input id="city" type="text" pInputText formControlName="city"
+             class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+    </div>
+
+    <div class="p-field flex flex-col">
+      <label for="country" class="font-semibold mb-1">Country</label>
+      <input id="country" type="text" pInputText formControlName="country"
+             class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+    </div>
+
+    <div class="p-field flex flex-col">
+      <label for="postal_code" class="font-semibold mb-1">Postal Code</label>
+      <input id="postal_code" type="text" pInputText formControlName="postal_code"
+             class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"/>
+    </div>
+
+
+    <div class="flex justify-end gap-3 mt-6">
+      <button pButton type="button" label="Cancel" class="p-button-secondary bg-gray-200 text-gray-800 hover:bg-gray-300 px-5 py-2 rounded-lg shadow" 
+              (click)="closeProfileModal()"></button>
+      <button pButton type="button" label="Save" class="p-button-success bg-blue-600 text-white hover:bg-blue-700 px-5 py-2 rounded-lg shadow"
+              (click)="saveProfile()"></button>
+    </div>
+
+  </form>
+
+</p-dialog>

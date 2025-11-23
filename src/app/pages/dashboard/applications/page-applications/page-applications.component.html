@@ -1,0 +1,86 @@
+<p-toast></p-toast>
+
+<div class="min-h-screen  p-3 ">
+  <h2 class="text-2xl font-bold text-gray-800 pt-30">Projects / Apps</h2>
+  <div class="flex justify-end items-center mb-6">
+
+    <button (click)="openForm()" pButton type="button" label="+ Add Project"
+      class="p-button-sm p-button-success"></button>
+  </div>
+  <app-search-date-filter>
+
+  </app-search-date-filter>
+
+  <p-table class="border border-1 rounded" [value]="applications" [paginator]="true" [rows]="5">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Client ID</th>
+        <th>Redirect URI</th>
+        <th>API Base URL</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-app let-i="rowIndex">
+      <tr>
+        <td>{{ app.id }}</td>
+        <td>{{ app.name }}</td>
+        <td>{{ app.client_id }}</td>
+        <td>{{ app.redirect_uri || '-' }}</td>
+        <td>{{ app.api_base_url || '-' }}</td>
+        <td>
+          <span [ngClass]="{'bg-green-600 text-white px-2 py-1 rounded': app.status === 'active',
+                            'bg-red-600 text-white px-2 py-1 rounded': app.status === 'inactive'}">
+            {{ app.status }}
+          </span>
+        </td>
+        <td class="flex gap-2">
+          <button pButton type="button" label="Edit" class="p-button-warning p-button-sm"
+            (click)="openForm(i)"></button>
+          <button pButton type="button" label="Delete" class="p-button-danger p-button-sm"
+            (click)="deleteProject(i)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+
+  <div *ngIf="showForm" class="fixed inset-0 flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-6 relative">
+      <button (click)="closeForm()"
+        class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+      <h3 class="text-xl font-bold mb-4">{{ editingIndex !== null ? 'Edit Project' : 'Add Project' }}</h3>
+      <form [formGroup]="projectForm" class="space-y-4">
+        <div class="flex flex-col">
+          <label>Project Name</label>
+          <input pInputText formControlName="name" />
+        </div>
+        <div class="flex flex-col">
+          <label>Client ID</label>
+          <input pInputText formControlName="client_id" />
+        </div>
+        <div class="flex flex-col">
+          <label>Client Secret</label>
+          <input pInputText formControlName="client_secret" />
+        </div>
+        <div class="flex flex-col">
+          <label>Redirect URI</label>
+          <input pInputText formControlName="redirect_uri" />
+        </div>
+        <div class="flex flex-col">
+          <label>API Base URL</label>
+          <input pInputText formControlName="api_base_url" />
+        </div>
+        <div class="flex flex-col">
+          <label>Status</label>
+
+        </div>
+        <button pButton type="button" label="{{ editingIndex !== null ? 'Update' : 'Add' }}"
+          class="w-full p-button-primary" (click)="saveProject()"></button>
+      </form>
+    </div>
+  </div>
+
+</div>

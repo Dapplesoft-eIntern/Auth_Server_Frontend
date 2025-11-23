@@ -1,0 +1,105 @@
+<div class="min-h-screen pt-20 p-5">
+  <h2 class="text-2xl font-bold mb-6 text-gray-800">User List</h2>
+
+  <app-search-date-filter>
+
+  </app-search-date-filter>
+
+
+  <div class="overflow-x-auto shadow rounded-lg">
+    <p-table [value]="businesses" [paginator]="true" [rows]="10"
+      class="p-datatable-striped p-datatable-gridlines min-w-full">
+
+      <ng-template pTemplate="header">
+        <tr class="bg-gray-800 text-white">
+          <th>ID</th>
+          <th>Owner User</th>
+          <th>Business Name</th>
+          <th>Industry</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Action</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-business>
+        <tr class="hover:bg-gray-50 transition">
+          <td>{{ business.id }}</td>
+          <td>{{ business.owner_user }}</td>
+          <td>{{ business.business_name }}</td>
+          <td>{{ business.industry_type }}</td>
+
+          <td>
+            <span [ngClass]="{
+              'bg-green-600 text-white px-2 py-1 rounded-full': business.status === 'active',
+              'bg-red-600 text-white px-2 py-1 rounded-full': business.status === 'inactive'
+            }">
+              {{ business.status }}
+            </span>
+          </td>
+
+          <td>{{ business.created_at | date:'short' }}</td>
+
+          <td class="flex gap-2">
+            <button pButton class="p-button-sm p-button-info" (click)="openEditDialog(business)">Edit</button>
+
+            <button pButton class="p-button-sm p-button-danger" (click)="deleteBusiness(business)">Delete</button>
+          </td>
+        </tr>
+      </ng-template>
+
+    </p-table>
+  </div>
+
+
+  <p-dialog header="{{ isAddMode ? 'Add Business' : 'Edit Business' }}" [(visible)]="dialogVisible" [modal]="true"
+    [style]="{ width: '450px' }" [contentStyle]="{ 'padding': '1.3rem' }" [draggable]="false">
+
+    <div class="p-fluid flex flex-col gap-4">
+
+      <div>
+        <label class="font-semibold">Owner User</label>
+        <input pInputText [(ngModel)]="editingBusiness.owner_user" class="p-inputtext p-component w-full" />
+      </div>
+
+      <div>
+        <label class="font-semibold">Business Name</label>
+        <input pInputText [(ngModel)]="editingBusiness.business_name" class="p-inputtext p-component w-full" />
+      </div>
+
+      <div>
+        <label class="font-semibold">Industry</label>
+        <input pInputText [(ngModel)]="editingBusiness.industry_type" class="p-inputtext p-component w-full" />
+      </div>
+
+      <div>
+        <label class="font-semibold">Status</label>
+        <select [(ngModel)]="editingBusiness.status" class="p-inputtext p-component w-full">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+
+    </div>
+
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-3 w-full">
+
+        <button pButton type="button" label="Cancel"
+          class="p-button-text p-2 px-4 border border-gray-300 rounded-lg hover:bg-gray-100"
+          (click)="dialogVisible = false">
+        </button>
+
+        <button pButton type="button" label="{{ isAddMode ? 'Add' : 'Update' }}"
+          class="p-button-success p-2 px-4 rounded-lg" (click)="saveBusiness()">
+        </button>
+
+      </div>
+    </ng-template>
+
+  </p-dialog>
+  <p-confirmDialog></p-confirmDialog>
+
+  <p-toast></p-toast>
+</div>
