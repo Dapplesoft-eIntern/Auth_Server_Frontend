@@ -1,3 +1,7 @@
+
+
+
+
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Token } from './token.model';
@@ -5,7 +9,7 @@ import { Token } from './token.model';
 @Injectable({
   providedIn: 'root'
 })
-export class TokenService {
+export class TokenDataService {
 
   private tokens: Token[] = [
     {
@@ -32,16 +36,16 @@ export class TokenService {
 
   constructor() {}
 
-
-  getTokens(): Observable<Token[]> {
+  getAll(): Observable<Token[]> {
     return of(this.tokens);
   }
 
-
-  revokeToken(id: bigint): void {
+  revoke(id: bigint): boolean {
     const token = this.tokens.find(t => t.id === id);
     if (token) {
       token.revoked = true;
+      return true;
     }
+    return false;
   }
 }

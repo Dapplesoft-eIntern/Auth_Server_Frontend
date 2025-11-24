@@ -1,18 +1,18 @@
-// import { Route } from '@angular/router'
-// import { PageLayout, setLayout } from '../../../../libs/common-components'
+import { Route } from '@angular/router'
+import { PageLayout, setLayout } from '../../../../libs/common-components'
 
-// export type RolePermissionsRoutes = {
-//     rolepermissions: Route
-// }
+export type RolePermissionsRoutes = {
+    rolepermissions: Route
+}
 
-// export const RolePermissionsRoutes: RolePermissionsRoutes = {
-//     rolepermissions: {
-//         path: 'admin/rolepermissions',
-//         loadComponent: () =>
-//             import('./page-rolepermissions/page-rolepermissions.component').then(
-//                 (m) => m.PageRolePermissionsComponent,
-//             ),
-//         resolve: { layout: setLayout(PageLayout.Dashboard) },
-//     },
-// }
+export const RolePermissionsRoutes: RolePermissionsRoutes = {
+    rolepermissions: {
+        path: 'admin/rolepermissions',
+        loadComponent: () =>
+            import('./page-rolepermissions/page-rolepermissions.component').then(
+                (m) => m.RolePermissionsRoutes,
+            ),
+        resolve: { layout: setLayout(PageLayout.Dashboard) },
+    },
+}
 

@@ -10,15 +10,15 @@ import { TagModule } from 'primeng/tag';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { MfaLogsService } from '../../../../../libs/mfalogs/mfalog-data.service';
+import { MfaLogsDataService } from '../../../../../libs/mfalogs/mfalog-data.service';
 import { MfaLog } from '../../../../../libs/mfalogs/mfalog.model';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
+
 
 
 @Component({
   selector: 'app-page-mfalogs',
   standalone: true,
-  imports: [CommonModule,SearchDateFilterComponent, ConfirmDialogModule, FormsModule,Toast, TableModule, DialogModule, ButtonModule, InputTextModule, TagModule],
+  imports: [CommonModule, ConfirmDialogModule, FormsModule,Toast, TableModule, DialogModule, ButtonModule, InputTextModule, TagModule],
   templateUrl: './page-mfalogs.component.html',
   styleUrls: ['./page-mfalogs.component.css'],
   providers: [MessageService, ConfirmationService]
@@ -30,7 +30,7 @@ export class PageMfaLogsRoutesComponent implements OnInit {
   isAddMode = false;
 
   constructor(
-    private mfaLogsService: MfaLogsService,
+    private mfaLogsService: MfaLogsDataService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {}

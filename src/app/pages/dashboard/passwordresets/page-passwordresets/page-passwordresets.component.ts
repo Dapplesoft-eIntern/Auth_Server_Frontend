@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,25 +10,38 @@ import { TagModule } from 'primeng/tag';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { PasswordDataService, PasswordReset } from '../../../../../libs/passwordresets/passwordreset-data.service';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
+
+import { PasswordResetDataService } from '../../../../../libs/passwordresets/passwordreset-data.service';
+import { PasswordReset } from '../../../../../libs/passwordresets/passwordreset.model';
+
 
 @Component({
   selector: 'app-page-passwordresets',
   standalone: true,
-  imports: [CommonModule,SearchDateFilterComponent, Toast,FormsModule,ConfirmDialogModule, TableModule, ButtonModule, DialogModule, InputTextModule, TagModule],
+  imports: [
+    CommonModule,
+    Toast,
+    FormsModule,
+    ConfirmDialogModule,
+    TableModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    TagModule
+  ],
   templateUrl: './page-passwordresets.component.html',
   styleUrls: ['./page-passwordresets.component.css'],
   providers: [MessageService, ConfirmationService]
 })
 export class PagePasswordResetsComponent implements OnInit {
+  
   resetTokens: PasswordReset[] = [];
   dialogVisible = false;
   editingToken: PasswordReset = {} as PasswordReset;
   isAddMode = false;
 
   constructor(
-    private passwordService: PasswordDataService,
+    private passwordService: PasswordResetDataService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {}
@@ -37,9 +51,17 @@ export class PagePasswordResetsComponent implements OnInit {
   }
 
   loadTokens() {
-    this.passwordService.getAll().subscribe(data => this.resetTokens = data);
+    this.passwordService.getAll().subscribe(data => {
+      this.resetTokens = data;
+    });
   }
 
+
+  openAddDialog() {
+    this.editingToken = {} as PasswordReset;
+    this.isAddMode = true;
+    this.dialogVisible = true;
+  }
 
   openEditDialog(token: PasswordReset) {
     this.editingToken = { ...token };
@@ -52,24 +74,40 @@ export class PagePasswordResetsComponent implements OnInit {
       this.passwordService.create(this.editingToken).subscribe(() => {
         this.loadTokens();
         this.dialogVisible = false;
-        this.messageService.add({ severity: 'success', summary: 'Added', detail: 'Password token added successfully' });
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Added',
+          detail: 'Password reset token added'
+        });
       });
+
     } else {
       this.passwordService.update(this.editingToken.id, this.editingToken).subscribe(() => {
         this.loadTokens();
         this.dialogVisible = false;
-        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Password token updated successfully' });
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Updated',
+          detail: 'Password reset token updated'
+        });
       });
     }
   }
 
   deleteToken(token: PasswordReset) {
     this.confirmationService.confirm({
-      message: `Are you sure you want to delete the token for ${token.user_name}?`,
+      message: `Delete reset token for ${token.user_name}?`,
       accept: () => {
         this.passwordService.delete(token.id).subscribe(() => {
           this.loadTokens();
-          this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Password token deleted successfully' });
+
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Deleted',
+            detail: 'Password token deleted'
+          });
         });
       }
     });

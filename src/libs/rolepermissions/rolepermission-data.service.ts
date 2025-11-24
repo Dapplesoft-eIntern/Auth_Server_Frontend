@@ -1,57 +1,42 @@
-// role-permission-data.service.ts
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { RolePermission } from './rolepermission.model';
+// import { Injectable } from '@angular/core';
+// import { BehaviorSubject, Observable, tap } from 'rxjs';
+// import { RolePermissionsApiService, RolePermission } from './rolepermission-api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RolePermissionService {
+// @Injectable({
+//   providedIn: 'root',
+// })
+// export class RolePermissionsDataService {
+//   private _rolePermissions$ = new BehaviorSubject<RolePermission[]>([]);
+//   private _loading$ = new BehaviorSubject<boolean>(false);
 
-  private rolePermissions: RolePermission[] = [
-    { role_id: 1, permission_id: 1 },
-    { role_id: 1, permission_id: 2 },
-    { role_id: 2, permission_id: 1 },
-    { role_id: 3, permission_id: 3 },
-  ];
+//   constructor(private api: RolePermissionsApiService) {}
 
-  constructor() {}
+//   get rolePermissions$(): Observable<RolePermission[]> {
+//     return this._rolePermissions$.asObservable();
+//   }
 
-  // Get all role-permission relationships
-  getRolePermissions(): Observable<RolePermission[]> {
-    return of(this.rolePermissions);
-  }
+//   get loading$(): Observable<boolean> {
+//     return this._loading$.asObservable();
+//   }
 
-  // Get permissions for a specific role
-  getPermissionsByRole(role_id: number): Observable<RolePermission[]> {
-    const filtered = this.rolePermissions.filter(rp => rp.role_id === role_id);
-    return of(filtered);
-  }
+//   fetchRolePermissions() {
+//     this._loading$.next(true);
+//     this.api.getRolePermissions()
+//       .pipe(
+//         tap(() => this._loading$.next(false))
+//       )
+//       .subscribe({
+//         next: (data) => this._rolePermissions$.next(data),
+//         error: () => this._loading$.next(false),
+//       });
+//   }
 
-  // Add a new role-permission link
-  addRolePermission(rolePermission: RolePermission): Observable<void> {
-    this.rolePermissions.push(rolePermission);
-    return of();
-  }
-
-  // Delete a role-permission link
-  deleteRolePermission(role_id: number, permission_id: number): Observable<void> {
-    this.rolePermissions = this.rolePermissions.filter(
-      rp => !(rp.role_id === role_id && rp.permission_id === permission_id)
-    );
-    return of();
-  }
-
-  // Replace all permissions for a role (useful for save/update from form)
-  setRolePermissions(role_id: number, permission_ids: number[]): Observable<void> {
-    // Remove existing permissions for this role
-    this.rolePermissions = this.rolePermissions.filter(rp => rp.role_id !== role_id);
-
-    // Add new permissions
-    permission_ids.forEach(pid => {
-      this.rolePermissions.push({ role_id, permission_id: pid });
-    });
-
-    return of();
-  }
-}
+//   deleteRolePermission(id: number) {
+//     return this.api.deleteRolePermission(id).pipe(
+//       tap(() => {
+//         const updated = this._rolePermissions$.value.filter(rp => rp.id !== id);
+//         this._rolePermissions$.next(updated);
+//       })
+//     );
+//   }
+// }

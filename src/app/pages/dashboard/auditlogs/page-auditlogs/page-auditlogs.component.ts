@@ -1,3 +1,7 @@
+
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,10 +13,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { AuditLog } from '../../../../../libs/auditlogs/auditlog.model';
-import { AuditLogsService } from '../../../../../libs/auditlogs/auditlog-data.service';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
-
-
+import { AuditStateService } from '../../../../../libs/auditlogs/auditlog-state.service';
 
 @Component({
   selector: 'app-page-auditlogs',
@@ -26,16 +27,11 @@ import { SearchDateFilterComponent } from "../../../shared/components/search-dat
     InputTextModule,
     ToastModule,
     ConfirmDialogModule,
-    SearchDateFilterComponent
-],
+  ],
   templateUrl: './page-auditlogs.component.html',
   providers: [MessageService, ConfirmationService]
 })
 export class PageAuditLogsRoutesComponent implements OnInit {
-
-  fromDate!: string;
-  toDate!: string;
-
 
   auditLogs: AuditLog[] = [];
   dialogVisible = false;
@@ -43,20 +39,21 @@ export class PageAuditLogsRoutesComponent implements OnInit {
   isAddMode = false;
 
   constructor(
-    private auditService: AuditLogsService,
+    private auditState: AuditStateService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
-    this.loadAuditLogs();
+    this.auditState.logs$.subscribe(data => this.auditLogs = data);
+    this.auditState.loadLogs();
   }
 
-  loadAuditLogs() {
-    this.auditService.getAll().subscribe(data => this.auditLogs = data);
+  openAddDialog() {
+    this.editingLog = { id: 0, user_name: '', business_name: '', action: '', description: '', created_at: '' };
+    this.isAddMode = true;
+    this.dialogVisible = true;
   }
-
-
 
   openEditDialog(log: AuditLog) {
     this.editingLog = { ...log };
@@ -66,40 +63,22 @@ export class PageAuditLogsRoutesComponent implements OnInit {
 
   saveLog() {
     if (this.isAddMode) {
-      this.auditService.create(this.editingLog).subscribe(log => {
-        this.auditLogs.push(log);
-        this.dialogVisible = false;
-        this.messageService.add({ severity: 'success', summary: 'Added', detail: 'Audit log added successfully' });
-      });
+      this.auditState.addLog(this.editingLog);
+      this.messageService.add({ severity: 'success', summary: 'Added', detail: 'Audit log added successfully' });
     } else {
-      this.auditService.update(this.editingLog.id, this.editingLog).subscribe(updated => {
-        if (updated) {
-          const index = this.auditLogs.findIndex(l => l.id === updated.id);
-          this.auditLogs[index] = updated;
-          this.dialogVisible = false;
-          this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Audit log updated successfully' });
-        }
-      });
+      this.auditState.updateLog(this.editingLog.id, this.editingLog);
+      this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Audit log updated successfully' });
     }
+    this.dialogVisible = false;
   }
 
   deleteLog(log: AuditLog) {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete this log?`,
       accept: () => {
-        this.auditService.delete(log.id).subscribe(success => {
-          if (success) {
-            this.auditLogs = this.auditLogs.filter(l => l.id !== log.id);
-            this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Audit log deleted successfully' });
-          }
-        });
+        this.auditState.deleteLog(log.id);
+        this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Audit log deleted successfully' });
       }
     });
   }
 }
-
-
-
-
-
-

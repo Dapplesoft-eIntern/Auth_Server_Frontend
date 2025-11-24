@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { MfaSettingsService } from '../../../../../libs/mfsettings/mfasetting-data.service';
+import { MfaSettingDataService } from '../../../../../libs/mfsettings/mfasetting-data.service';
 import { MfaSetting } from './../../../../../libs/mfsettings/mfasetting.model';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
+
 
 @Component({
   selector: 'app-page-mfasettings',
@@ -15,7 +15,6 @@ import { SearchDateFilterComponent } from "../../../shared/components/search-dat
     TableModule,
     ButtonModule,
     TagModule,
-    SearchDateFilterComponent,
   ],
   templateUrl: './page-mfasettings.component.html',
   styleUrls: ['./page-mfasettings.component.css']
@@ -24,7 +23,7 @@ export class PageMfaSettingsComponent implements OnInit {
 
   mfaSettings: MfaSetting[] = [];
 
-  constructor(private mfaService: MfaSettingsService) {}
+  constructor(private mfaService: MfaSettingDataService) {}
 
   ngOnInit(): void {
     this.mfaService.getAll().subscribe(data => {

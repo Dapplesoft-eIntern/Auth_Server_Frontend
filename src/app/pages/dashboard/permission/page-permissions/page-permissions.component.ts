@@ -8,15 +8,25 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
-import { PermissionsService } from '../../../../../libs/permissions/permission-data.service';
+import { PermissionsDataService } from '../../../../../libs/permissions/permission-data.service';
 import { Permission } from '../../../../../libs/permissions/permission.model';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
+
 
 @Component({
   selector: 'app-page-permissions',
   standalone: true,
-  imports: [CommonModule, FormsModule,SearchDateFilterComponent, TableModule, ButtonModule, DialogModule, InputTextModule, ToastModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+
+    TableModule,
+    ButtonModule,
+    DialogModule,
+    InputTextModule,
+    ToastModule
+  ],
   templateUrl: './page-permissions.component.html',
+  styleUrls: ['./page-permissions.component.css'],
   providers: [MessageService]
 })
 export class PagePermissionsComponent implements OnInit {
@@ -25,15 +35,29 @@ export class PagePermissionsComponent implements OnInit {
   selectedPermission: Permission | null = null;
   permissionForm: { code: string; description: string } = { code: '', description: '' };
 
-  constructor(private permissionsService: PermissionsService, private messageService: MessageService) {}
+  constructor(
+    private permissionsService: PermissionsDataService, // <-- Corrected
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
-    this.permissionsService.getPermissions().subscribe(data => this.permissions = data);
+    this.loadPermissions();
   }
 
+  loadPermissions() {
+    this.permissionsService.getPermissions().subscribe((data: Permission[]) => {
+      this.permissions = data;
+    });
+  }
+
+  openAddDialog() {
+    this.selectedPermission = null;
+    this.permissionForm = { code: '', description: '' };
+    this.displayDialog = true;
+  }
 
   openEditDialog(permission: Permission) {
-    this.selectedPermission = permission;
+    this.selectedPermission = { ...permission };
     this.permissionForm = { code: permission.code, description: permission.description };
     this.displayDialog = true;
   }
@@ -44,7 +68,6 @@ export class PagePermissionsComponent implements OnInit {
 
   savePermission() {
     if (this.selectedPermission) {
-
       const updated: Permission = { ...this.selectedPermission, ...this.permissionForm };
       this.permissionsService.updatePermission(updated).subscribe(p => {
         const index = this.permissions.findIndex(x => x.id === p.id);
@@ -53,7 +76,6 @@ export class PagePermissionsComponent implements OnInit {
         this.displayDialog = false;
       });
     } else {
-
       const newPermission: Permission = { id: 0n, ...this.permissionForm };
       this.permissionsService.addPermission(newPermission).subscribe(p => {
         this.permissions.push(p);

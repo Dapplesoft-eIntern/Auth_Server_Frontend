@@ -1,3 +1,7 @@
+
+
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
@@ -7,78 +11,80 @@ import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../../../../../libs/user/user-data.service';
-import { MessageService } from 'primeng/api';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { UserStateService } from '../../../../../libs/user/user-state.service';
+import { User } from '../../../../../libs/user/user.model';
+
 
 @Component({
   selector: 'app-page-user',
   standalone: true,
   imports: [
-    CommonModule,SearchDateFilterComponent, TableModule, PaginatorModule, ButtonModule, ToastModule,
-    DialogModule, InputTextModule, FormsModule
+    CommonModule,
+    TableModule,
+    PaginatorModule,
+    ButtonModule,
+    ToastModule,
+    DialogModule,
+    InputTextModule,
+    FormsModule,
   ],
   templateUrl: './page-user.component.html',
   styleUrls: ['./page-user.component.css'],
-  providers: [MessageService]
+  providers: [MessageService, ConfirmationService]
 })
 export class PageUserComponent implements OnInit {
 
-  users: any[] = [];
-  selectedUser: any = {};
+  users: User[] = [];
+  selectedUser: User = {} as User;
   displayDialog: boolean = false;
   isEdit: boolean = false;
 
-  constructor(private userService: UserService, private messageService: MessageService) {}
+  constructor(
+    private userState: UserStateService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit(): void {
-    this.userService.getAll().subscribe(data => this.users = data);
+    this.userState.users$.subscribe(data => this.users = data);
+    this.userState.loadUsers();
   }
 
-
   openAddDialog() {
-    this.selectedUser = {};
+    this.selectedUser = {} as User;
     this.isEdit = false;
     this.displayDialog = true;
   }
 
-
-  openEditDialog(user: any) {
+  openEditDialog(user: User) {
     this.selectedUser = { ...user };
     this.isEdit = true;
     this.displayDialog = true;
   }
 
-
   saveUser() {
-    if(this.isEdit) {
-      this.userService.update(this.selectedUser.id, this.selectedUser).subscribe(() => {
-        const index = this.users.findIndex(u => u.id === this.selectedUser.id);
-        if(index > -1) this.users[index] = { ...this.selectedUser };
-        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'User updated successfully' });
-        this.displayDialog = false;
-      });
+    if (this.isEdit) {
+      this.userState.updateUser(this.selectedUser.id, this.selectedUser);
+      this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'User updated successfully' });
     } else {
-      const newId = Math.max(...this.users.map(u => u.id)) + 1;
-      const newUser = { ...this.selectedUser, id: newId };
-      this.users.push(newUser);
+      this.userState.addUser(this.selectedUser);
       this.messageService.add({ severity: 'success', summary: 'Added', detail: 'User added successfully' });
-      this.displayDialog = false;
     }
+    this.displayDialog = false;
   }
 
-  deleteUser(user: any) {
-     {
-      this.userService.delete(user.id).subscribe(() => {
-        this.users = this.users.filter(u => u.id !== user.id);
+  deleteUser(user: User) {
+    this.confirmationService.confirm({
+      message: `Are you sure you want to delete ${user.name}?`,
+      accept: () => {
+        this.userState.deleteUser(user.id);
         this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'User deleted successfully' });
-      });
-    }
+      }
+    });
   }
-
 
   cancelDialog() {
     this.displayDialog = false;
   }
-
 }

@@ -7,9 +7,6 @@
     <button (click)="openForm()" pButton type="button" label="+ Add Project"
       class="p-button-sm p-button-success"></button>
   </div>
-  <app-search-date-filter>
-
-  </app-search-date-filter>
 
   <p-table class="border border-1 rounded" [value]="applications" [paginator]="true" [rows]="5">
     <ng-template pTemplate="header">

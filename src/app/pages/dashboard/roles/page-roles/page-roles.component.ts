@@ -7,13 +7,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { RoleService } from '../../../../../libs/role/role-data.service';
+import { RoleDataService } from '../../../../../libs/role/role-data.service';
 import { Role } from '../../../../../libs/role/role.model';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
 @Component({
   selector: 'app-page-roles',
   standalone: true,
-  imports: [CommonModule, TableModule,SearchDateFilterComponent, ButtonModule, DialogModule, InputTextModule, ToastModule, FormsModule],
+  imports: [CommonModule, TableModule, ButtonModule, DialogModule, InputTextModule, ToastModule, FormsModule],
   templateUrl: './page-roles.component.html',
   providers: [MessageService]
 })
@@ -23,10 +22,12 @@ export class PageRolesComponent implements OnInit {
   selectedRole: Role | null = null;
   roleForm: { role_name: string; description: string } = { role_name: '', description: '' };
 
-  constructor(private roleService: RoleService, private messageService: MessageService) {}
+  constructor(private roleService: RoleDataService, private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.roleService.getRoles().subscribe(data => this.roles = data);
+    this.roleService.loadRoles().subscribe((data: Role[]) => {
+      this.roles = data;
+    });
   }
 
   openAddDialog() {
@@ -77,3 +78,9 @@ export class PageRolesComponent implements OnInit {
     console.log('View role:', role);
   }
 }
+
+
+
+
+
+

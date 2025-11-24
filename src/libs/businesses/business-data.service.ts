@@ -1,41 +1,37 @@
-
-
-
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Business } from './businesses.model';
+import { BusinessApiService } from './business-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BusinessService {
+export class BusinessDataService {
+  private businesses: Business[] = [];
 
-  private businesses: Business[] = [
-    { id: 1, owner_user: 'Mohammad Arman', business_name: 'Tech Solutions Ltd', industry_type: 'IT Services', status: 'active', created_at: '2025-11-15' },
-    { id: 2, owner_user: 'Jane Smith', business_name: 'Green Farms', industry_type: 'Agriculture', status: 'inactive', created_at: '2025-11-10' },
-    { id: 3, owner_user: 'Alice Johnson', business_name: 'Digital Agency BD', industry_type: 'Marketing Agency', status: 'active', created_at: '2025-11-05' }
-  ];
+  constructor(private api: BusinessApiService) {}
 
-  getBusinesses(): Observable<Business[]> {
-    return of(this.businesses);
+  loadBusinesses(): Observable<Business[]> {
+    return this.api.getBusinesses().pipe(
+      tap(data => this.businesses = data)
+    );
   }
 
-  create(business: Business): Observable<Business> {
-    const newId = Math.max(...this.businesses.map(b => b.id)) + 1;
-    business.id = newId;
-    business.created_at = new Date().toISOString();
+  getLocalBusinesses(): Business[] {
+    return this.businesses;
+  }
+
+  addBusiness(business: Business) {
     this.businesses.push(business);
-    return of(business);
   }
 
-  update(id: number, business: Business): Observable<Business> {
+  updateBusinessLocal(id: number, business: Business) {
     const index = this.businesses.findIndex(b => b.id === id);
     if (index !== -1) this.businesses[index] = business;
-    return of(business);
   }
 
-  delete(id: number): Observable<void> {
+  deleteBusinessLocal(id: number) {
     this.businesses = this.businesses.filter(b => b.id !== id);
-    return of(undefined);
   }
 }

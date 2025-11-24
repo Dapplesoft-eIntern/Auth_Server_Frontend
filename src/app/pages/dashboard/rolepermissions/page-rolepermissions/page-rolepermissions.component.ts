@@ -1,30 +1,40 @@
-// import { Injectable } from '@angular/core';
-// import { Observable, of } from 'rxjs';
-// import { RolePermission } from './rolepermission.model';
+import { Component } from '@angular/core';
+import { ReusableTableComponent } from '../../../shared/reusable-table/reusable-table.component';
+import { ToastModule } from 'primeng/toast';
 
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class RolePermissionsService {
-//   private rolePermissions: RolePermission[] = [];
 
-//   constructor() {}
+@Component({
+  selector: 'app-page-rolepermissions',
+  standalone: true,
+  imports: [ReusableTableComponent,ToastModule],
+  templateUrl: './page-rolepermissions.component.html',
+})
+export class RolePermissionsRoutes {
+  loading = false;
 
-//   getRolePermissions(): Observable<RolePermission[]> {
-//     return of(this.rolePermissions);
-//   }
+  columns = [
+    { field: 'role', header: 'Role' },
+    { field: 'permission', header: 'Permission' },
+    { field: 'description', header: 'Description' },
+    { field: 'status', header: 'Status' }
+  ];
 
-//   saveRolePermissions(data: RolePermission[]): Observable<void> {
-//     // Replace existing permissions for the role
-//     const roleId = data[0]?.role_id;
-//     if (roleId != null) {
-//       this.rolePermissions = this.rolePermissions.filter(rp => rp.role_id !== roleId).concat(data);
-//     }
-//     return of();
-//   }
+  data = [
+    { role: 'Admin', permission: 'Read/Write', description: 'Full Access', status: 'Active' },
+    { role: 'User', permission: 'Read Only', description: 'Limited Access', status: 'Inactive' },
+    { role: 'Admin', permission: 'Read/Write', description: 'Full Access', status: 'Active' },
+    { role: 'User', permission: 'Read Only', description: 'Limited Access', status: 'Inactive' }
+  ];
 
-//   deleteRolePermissions(roleId: number): Observable<void> {
-//     this.rolePermissions = this.rolePermissions.filter(rp => rp.role_id !== roleId);
-//     return of();
-//   }
-// }
+  editRow(row: any) {
+
+    console.log('Edit row:', row);
+    alert(`Edit role: ${row.role}, permission: ${row.permission}`);
+  }
+
+
+  deleteRow(row: any) {
+    this.data = this.data.filter(d => d !== row);
+    console.log('Deleted row:', row);
+  }
+}

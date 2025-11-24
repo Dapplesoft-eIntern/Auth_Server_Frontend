@@ -1,3 +1,6 @@
+
+
+
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { EmailVerification } from './emailVerification.model';
@@ -5,7 +8,7 @@ import { EmailVerification } from './emailVerification.model';
 @Injectable({
   providedIn: 'root'
 })
-export class EmailVerificationService {
+export class EmailVerificationDataService {
 
   private verifications: EmailVerification[] = [
     {
@@ -27,8 +30,34 @@ export class EmailVerificationService {
   constructor() {}
 
 
-  getVerifications(): Observable<EmailVerification[]> {
+  getAll(): Observable<EmailVerification[]> {
     return of(this.verifications);
+  }
+
+
+  create(verification: EmailVerification): Observable<EmailVerification> {
+    const newId = this.verifications.length ? Math.max(...this.verifications.map(v => Number(v.id))) + 1 : 1;
+    verification.id = BigInt(newId);
+    this.verifications.push(verification);
+    return of(verification);
+  }
+
+
+  update(id: bigint, verification: EmailVerification): Observable<EmailVerification> {
+    const index = this.verifications.findIndex(v => v.id === id);
+    if (index !== -1) this.verifications[index] = verification;
+    return of(verification);
+  }
+
+
+  delete(id: bigint): Observable<void> {
+    this.verifications = this.verifications.filter(v => v.id !== id);
+    return of(undefined);
+  }
+
+
+  findByToken(token: string): EmailVerification | undefined {
+    return this.verifications.find(v => v.token === token);
   }
 
 
@@ -39,10 +68,5 @@ export class EmailVerificationService {
       return true;
     }
     return false;
-  }
-
-
-  findByToken(token: string): EmailVerification | undefined {
-    return this.verifications.find(v => v.token === token);
   }
 }

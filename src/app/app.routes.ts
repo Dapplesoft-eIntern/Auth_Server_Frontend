@@ -16,7 +16,7 @@ import { businessesRoutes, BusinessesRoutes } from './pages/dashboard/business/b
 import { memberRoutes, MemberRoutes } from './pages/dashboard/business-member/member.routes'
 import { rolesRoutes, RolesRoutes } from './pages/dashboard/roles/roles.routes'
 import { PermissionsRoutes } from './pages/dashboard/permission/permissions.routes'
-// import { RolePermissionsRoutes } from './pages/dashboard/rolepermissions/rolepermissions.routes'
+import { RolePermissionsRoutes } from './pages/dashboard/rolepermissions/rolepermissions.routes'
 import { applicationsRoutes, ApplicationsRoutes } from './pages/dashboard/applications/applications.routes'
 import { tokensRoutes, TokensRoutes } from './pages/dashboard/tokens/tokens.routes'
 import { EmailVerificationsRoutes, emailVerificationssRoutes } from './pages/dashboard/emailverifications/emailVerifications.routes'
@@ -48,7 +48,7 @@ type AppRouteGroups = [
     MemberRoutes,
     RolesRoutes,
     PermissionsRoutes,
-    // RolePermissionsRoutes,
+    RolePermissionsRoutes,
     ApplicationsRoutes,
     TokensRoutes,
     EmailVerificationsRoutes,
@@ -76,7 +76,7 @@ const groupedRoutes: AppRouteGroups = [
     memberRoutes,
     rolesRoutes,
     PermissionsRoutes,
-    // RolePermissionsRoutes,
+    RolePermissionsRoutes,
     applicationsRoutes,
     tokensRoutes,
     emailVerificationssRoutes,

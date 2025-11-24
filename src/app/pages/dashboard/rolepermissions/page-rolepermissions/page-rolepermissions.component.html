@@ -1,37 +1,12 @@
-<!-- <p-toast></p-toast>
-
-<div class="min-h-screen flex items-center justify-center bg-gray-100 p-6">
-  <div class="bg-white shadow-xl rounded-3xl p-8 w-full max-w-lg">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Assign Permissions to Role</h2>
-
-    <form [formGroup]="roleForm" class="space-y-4">
-
-      <div class="flex flex-col">
-        <label class="font-semibold mb-2">Select Role</label>
-        <p-dropdown
-          [options]="roles"
-          optionLabel="name"
-          formControlName="role_id"
-          placeholder="Select a Role">
-        </p-dropdown>
-      </div>
+<h2 class="mb-4 text-2xl font-bold">Role Permissions</h2>
+<div class="pt-30">
 
 
-      <div class="flex flex-col">
-        <label class="font-semibold mb-2">Permissions</label>
-        <div class="flex flex-col gap-2">
-          <div *ngFor="let perm of permissions; let i = index">
-            <p-checkbox
-              [formControl]="permissionsFormArray.controls[i]"
-              binary="true"
-              label="{{perm.code}} - {{perm.description}}">
-            </p-checkbox>
-          </div>
-        </div>
-      </div>
-
-
-      <button pButton type="button" label="Save Permissions" class="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700 transition font-semibold shadow-md" (click)="saveRolePermissions()"></button>
-    </form>
-  </div>
-</div> -->
+<app-reusable-table
+  [columns]="columns"
+  [data]="data"
+  [loading]="loading"
+  (edit)="editRow($event)"
+  (delete)="deleteRow($event)">
+</app-reusable-table>
+</div>

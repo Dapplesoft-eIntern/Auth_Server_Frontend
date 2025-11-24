@@ -6,14 +6,13 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { ApplicationService } from '../../../../../libs/applicatiaons/application-data.service';
+import { ApplicationDataService } from '../../../../../libs/applicatiaons/application-data.service';
 import { Application } from '../../../../../libs/applicatiaons/application.model';
-import { SearchDateFilterComponent } from "../../../shared/components/search-date-filter.component";
 
 @Component({
   selector: 'app-page-applications',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SearchDateFilterComponent, TableModule, ButtonModule, InputTextModule, ToastModule],
+  imports: [CommonModule, ReactiveFormsModule, TableModule, ButtonModule, InputTextModule, ToastModule],
   templateUrl: './page-applications.component.html',
   providers: [MessageService]
 })
@@ -30,7 +29,7 @@ export class PageApplicationsComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private appService: ApplicationService,
+    private appService: ApplicationDataService,
     private messageService: MessageService
   ) {
     this.projectForm = this.fb.group({

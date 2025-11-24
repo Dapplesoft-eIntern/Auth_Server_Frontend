@@ -1,3 +1,5 @@
+
+
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -9,15 +11,14 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService, ConfirmationService } from 'primeng/api';
-import { BusinessService } from '../../../../../libs/businesses/business-data.service';
+import { BusinessApiService } from '../../../../../libs/businesses/business-api.service';
 import { Business } from '../../../../../libs/businesses/businesses.model';
 
-import { SearchDateFilterComponent } from '../../../shared/components/search-date-filter.component';
 
 @Component({
   selector: 'app-page-businesses',
   standalone: true,
-  imports: [CommonModule, FormsModule, ConfirmDialogModule, TableModule, SearchDateFilterComponent, PaginatorModule, ToastModule, ButtonModule, DialogModule, InputTextModule],
+  imports: [CommonModule, FormsModule, ConfirmDialogModule, TableModule, PaginatorModule, ToastModule, ButtonModule, DialogModule, InputTextModule],
   templateUrl: './page-businesses.component.html',
   styleUrls: ['./page-businesses.component.css'],
   providers: [MessageService, ConfirmationService]
@@ -29,7 +30,7 @@ export class PageBusinessesComponent implements OnInit {
   isAddMode = false;
 
   constructor(
-    private businessService: BusinessService,
+    private businessService: BusinessApiService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
   ) { }
@@ -56,13 +57,13 @@ export class PageBusinessesComponent implements OnInit {
 
   saveBusiness() {
     if (this.isAddMode) {
-      this.businessService.create(this.editingBusiness).subscribe(() => {
+      this.businessService.createBusiness(this.editingBusiness).subscribe(() => {
         this.loadBusinesses();
         this.dialogVisible = false;
         this.messageService.add({ severity: 'success', summary: 'Added', detail: 'Business added successfully' });
       });
     } else {
-      this.businessService.update(this.editingBusiness.id, this.editingBusiness).subscribe(() => {
+      this.businessService.updateBusiness(this.editingBusiness.id, this.editingBusiness).subscribe(() => {
         this.loadBusinesses();
         this.dialogVisible = false;
         this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Business updated successfully' });
@@ -74,7 +75,7 @@ export class PageBusinessesComponent implements OnInit {
     this.confirmationService.confirm({
       message: `Are you sure you want to delete ${business.business_name}?`,
       accept: () => {
-        this.businessService.delete(business.id).subscribe(() => {
+        this.businessService.deleteBusiness(business.id).subscribe(() => {
           this.loadBusinesses();
           this.messageService.add({ severity: 'success', summary: 'Deleted', detail: 'Business deleted successfully' });
         });
