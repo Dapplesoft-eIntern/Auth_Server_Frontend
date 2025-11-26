@@ -1,21 +1,18 @@
-// role-api.service.ts
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Role } from './role.model';
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs'
+import { Role } from './role.model'
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class RoleApiService {
+    constructor() {}
 
-  constructor() {}
+    getRoles(): Observable<Role[]> {
+        throw new Error('API not implemented')
+    }
 
-  getRoles(): Observable<Role[]> {
-    // এখানে real API call হবে
-    throw new Error("API not implemented");
-  }
-
-  deleteRole(id: number): Observable<boolean> {
-    throw new Error("API not implemented");
-  }
+    deleteRole(id: number): Observable<boolean> {
+        throw new Error('API not implemented')
+    }
 }

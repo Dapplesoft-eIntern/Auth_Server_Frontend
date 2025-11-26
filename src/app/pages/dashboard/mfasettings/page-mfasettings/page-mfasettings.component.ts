@@ -1,37 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
-import { MfaSettingDataService } from '../../../../../libs/mfsettings/mfasetting-data.service';
-import { MfaSetting } from './../../../../../libs/mfsettings/mfasetting.model';
-
+import { CommonModule } from '@angular/common'
+import { Component, OnInit } from '@angular/core'
+import { ButtonModule } from 'primeng/button'
+import { TableModule } from 'primeng/table'
+import { TagModule } from 'primeng/tag'
+import { MfaSetting } from './../../../../../libs/mfsettings/mfasetting.model'
+import { MfaSettingDataService } from '../../../../../libs/mfsettings/mfasetting-data.service'
 
 @Component({
-  selector: 'app-page-mfasettings',
-  standalone: true,
-  imports: [
-    CommonModule,
-    TableModule,
-    ButtonModule,
-    TagModule,
-  ],
-  templateUrl: './page-mfasettings.component.html',
-  styleUrls: ['./page-mfasettings.component.css']
+    selector: 'app-page-mfasettings',
+    standalone: true,
+    imports: [CommonModule, TableModule, ButtonModule, TagModule],
+    templateUrl: './page-mfasettings.component.html',
+    styleUrls: ['./page-mfasettings.component.css'],
 })
 export class PageMfaSettingsComponent implements OnInit {
+    mfaSettings: MfaSetting[] = []
 
-  mfaSettings: MfaSetting[] = [];
+    constructor(private mfaService: MfaSettingDataService) {}
 
-  constructor(private mfaService: MfaSettingDataService) {}
+    ngOnInit(): void {
+        this.mfaService.getAll().subscribe((data) => {
+            this.mfaSettings = data
+        })
+    }
 
-  ngOnInit(): void {
-    this.mfaService.getAll().subscribe(data => {
-      this.mfaSettings = data;
-    });
-  }
-
-  toggleEnabled(setting: MfaSetting) {
-    this.mfaService.toggleEnabled(setting.user_name);
-  }
+    toggleEnabled(setting: MfaSetting) {
+        this.mfaService.toggleEnabled(setting.user_name)
+    }
 }

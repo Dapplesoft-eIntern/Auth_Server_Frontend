@@ -1,39 +1,38 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { AuditLog } from './auditlog.model';
-import { AuditDataService } from './auditlog-data.service';
+import { Injectable } from '@angular/core'
+import { BehaviorSubject } from 'rxjs'
+import { AuditLog } from './auditlog.model'
+import { AuditDataService } from './auditlog-data.service'
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class AuditStateService {
-  private logsSubject = new BehaviorSubject<AuditLog[]>([]);
-  logs$ = this.logsSubject.asObservable();
+    private logsSubject = new BehaviorSubject<AuditLog[]>([])
+    logs$ = this.logsSubject.asObservable()
 
-  constructor(private dataService: AuditDataService) {}
+    constructor(private dataService: AuditDataService) {}
 
-  // Load initial logs from data service (dummy)
-  loadLogs() {
-    this.dataService.getAll().subscribe(data => {
-      this.logsSubject.next(data);
-    });
-  }
+    loadLogs() {
+        this.dataService.getAll().subscribe((data) => {
+            this.logsSubject.next(data)
+        })
+    }
 
-  addLog(log: AuditLog) {
-    this.dataService.create(log).subscribe(newLog => {
-      this.logsSubject.next(this.dataService.getLocalLogs());
-    });
-  }
+    addLog(log: AuditLog) {
+        this.dataService.create(log).subscribe((newLog) => {
+            this.logsSubject.next(this.dataService.getLocalLogs())
+        })
+    }
 
-  updateLog(id: number, log: AuditLog) {
-    this.dataService.update(id, log).subscribe(() => {
-      this.logsSubject.next(this.dataService.getLocalLogs());
-    });
-  }
+    updateLog(id: number, log: AuditLog) {
+        this.dataService.update(id, log).subscribe(() => {
+            this.logsSubject.next(this.dataService.getLocalLogs())
+        })
+    }
 
-  deleteLog(id: number) {
-    this.dataService.delete(id).subscribe(() => {
-      this.logsSubject.next(this.dataService.getLocalLogs());
-    });
-  }
+    deleteLog(id: number) {
+        this.dataService.delete(id).subscribe(() => {
+            this.logsSubject.next(this.dataService.getLocalLogs())
+        })
+    }
 }

@@ -1,29 +1,18 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AuditLog } from './auditlog.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http'
+import { Inject, Injectable, inject } from '@angular/core'
+import { Observable } from 'rxjs'
+import { ApiService } from '../common-service/lib/api.service'
+import { ENVIRONMENT, EnvironmentConfig } from '../core'
+import { AuditLog, AuditLogDto } from './auditlog.model'
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
-export class AuditApiService {
-  private apiUrl = '/api/auditlogs'; // তোমার backend endpoint
-
-  constructor(private http: HttpClient) {}
-
-  getLogs(): Observable<AuditLog[]> {
-    return this.http.get<AuditLog[]>(this.apiUrl);
-  }
-
-  createLog(log: AuditLog): Observable<AuditLog> {
-    return this.http.post<AuditLog>(this.apiUrl, log);
-  }
-
-  updateLog(id: number, log: AuditLog): Observable<AuditLog> {
-    return this.http.put<AuditLog>(`${this.apiUrl}/${id}`, log);
-  }
-
-  deleteLog(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
-  }
+export class AuditApiService extends ApiService<AuditLog, AuditLogDto> {
+    constructor(
+        @Inject(ENVIRONMENT)
+        private env: EnvironmentConfig,
+    ) {
+        super(inject(HttpClient), `${env.apiUrl}/auditlogs`)
+    }
 }
