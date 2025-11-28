@@ -1,1 +1,1 @@
-export * from './reusable-table.component';
+export * from './reusable-table.component'

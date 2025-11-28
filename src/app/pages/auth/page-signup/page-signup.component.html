@@ -11,7 +11,7 @@
 
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-4">
 
-    
+
       <input type="text" formControlName="fullName" placeholder="Full Name"
         class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
       @if(signupForm.get('fullName')?.touched && signupForm.get('fullName')?.hasError('required')) {
@@ -33,7 +33,7 @@
         <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Password"
           class="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         <span class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" (click)="togglePassword()">
-          {{ showPassword ? '🙈' : '👁️' }}
+          <!-- {{ showPassword ? '🙈' : '👁️' }} -->
         </span>
         @if(signupForm.get('password')?.touched && signupForm.get('password')?.hasError('required')) {
           <div class="text-red-500 text-sm">Password is required</div>
@@ -46,7 +46,7 @@
           placeholder="Confirm Password"
           class="w-full border border-gray-300 rounded-lg px-4 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         <span class="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" (click)="toggleConfirmPassword()">
-          {{ showConfirmPassword ? '🙈' : '👁️' }}
+          <!-- {{ showConfirmPassword ? '' : '' }} -->
         </span>
 
         @if(signupForm.get('confirmPassword')?.touched && signupForm.get('confirmPassword')?.hasError('required')) {
@@ -57,7 +57,7 @@
         }
       </div>
 
-   
+
       <div class="flex items-center text-sm">
         <label class="flex items-center space-x-2">
           <input type="checkbox" formControlName="acceptTerms" class="accent-blue-500" />
