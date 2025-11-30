@@ -13,7 +13,7 @@ export type AuthRoutes = {
 
 export const authRoutes: AuthRoutes = {
     login: {
-        path: 'login',
+        path: '',
         pathMatch: 'full',
         loadComponent: () =>
             import('./page-login/page-login.component').then(
@@ -22,8 +22,7 @@ export const authRoutes: AuthRoutes = {
         resolve: { layout: setLayout(PageLayout.Public) },
     },
     todo: {
-        path: '',
-        pathMatch: 'full',
+        path: 'admin/todo',
         loadComponent: () =>
             import('../page-todo/page-todo.component').then(
                 (m) => m.PageTodoComponent,
