@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core'
 import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms'
-import { Login } from './login.model'
+import { LoginRequest } from './login.model'
 
 @Injectable()
 export class LoginFormService {
@@ -11,18 +11,26 @@ export class LoginFormService {
         const { required, minLength, pattern } = Validators
 
         return this.fb.group({
-            phone: ['', [required, pattern(/^\d{11}$/)]],
+            //phone: ['', [required, pattern(/^\d{11}$/)]],
+            email: [
+                '',
+                [
+                    required,
+                    pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
+                ],
+            ],
             password: [
                 '',
                 [
                     required,
-                    minLength(8),
-                    pattern(/[A-Z]/),
-                    pattern(/[a-z]/),
-                    pattern(/[0-9]/),
-                    pattern(/[^A-Za-z0-9]/),
+                    minLength(7),
+                    //pattern(/[A-Z]/),
+                    //pattern(/[a-z]/),
+                    //pattern(/[0-9]/),
+                    //pattern(/[^A-Za-z0-9]/),
                 ],
             ],
+            rememberMe: [false],
         })
     }
 
@@ -34,7 +42,7 @@ export class LoginFormService {
         return this.form.getRawValue()
     }
 
-    patchForm(data: Login) {
+    patchForm(data: LoginRequest) {
         this.form.patchValue(data)
     }
 }
