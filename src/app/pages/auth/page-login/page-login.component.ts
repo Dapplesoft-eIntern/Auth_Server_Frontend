@@ -5,7 +5,8 @@ import { Router, RouterModule } from '@angular/router'
 import { MessageService } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { ToastModule } from 'primeng/toast'
-import { LoginFormService } from '../../../../libs/auth'
+import { LoginFormService, TokenStorageService } from '../../../../libs/auth'
+import { LoginApiService } from '../../../../libs/auth/login/login-api.service'
 
 @Component({
     selector: 'app-login',
@@ -26,6 +27,8 @@ export class PageLoginComponent {
         public loginFormService: LoginFormService,
         private router: Router,
         private messageService: MessageService,
+        private loginApiService: LoginApiService,
+        private tokenStorage: TokenStorageService,
     ) {}
 
     togglePassword() {
@@ -37,13 +40,30 @@ export class PageLoginComponent {
             const formData = this.loginFormService.getValue()
             console.log('Login Data:', formData)
 
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Login Successful',
-                detail: 'Welcome back!',
-                life: 1500,
+            this.loginApiService.login(formData).subscribe({
+                next: (response) => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Login Successful',
+                        detail: 'Welcome back!',
+                        life: 1500,
+                    })
+                    // navigation happens ONLY when login API succeeded
+                    setTimeout(() => {
+                        this.router.navigate(['/admin/user'])
+                    }, 500) // 0.5 sec
+                },
+
+                error: (err: { error: { message: any } }) => {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Login Failed',
+                        detail:
+                            err.error?.message ?? 'Invalid email or password.',
+                        life: 2000,
+                    })
+                },
             })
-            setTimeout(() => this.router.navigate(['/admin/user']), 1500)
         } else {
             this.loginFormService.form.markAllAsTouched()
             this.messageService.add({
