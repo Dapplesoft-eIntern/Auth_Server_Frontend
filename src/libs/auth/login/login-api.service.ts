@@ -12,9 +12,10 @@ export class LoginApiService {
     // Modern dependency injection
     private http = inject(HttpClient)
     private tokenStorageService = inject(TokenStorageService)
+    private context = inject(TokenStorageService)
     private baseUrl = `${environment.authApiUrl}`
 
-    login(payload: LoginRequest): Observable<LoginResponse> {
+    login(payload: LoginRequest): Observable<LoginResponse | string> {
         return this.http
             .post<LoginResponse>(`${this.baseUrl}/users/login`, payload)
             .pipe(
@@ -29,6 +30,11 @@ export class LoginApiService {
                         if (response.token) {
                             this.tokenStorageService.saveAccessToken(
                                 response.token,
+                            )
+                        }
+                        if (response.user?.id) {
+                            this.tokenStorageService.saveAccessToken(
+                                response.user.id,
                             )
                         }
                         if (response.refreshToken) {
