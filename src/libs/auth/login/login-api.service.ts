@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable, inject } from '@angular/core'
 import { catchError, Observable, tap, throwError } from 'rxjs'
-import { environment } from '../../../environment/environment'
+import { environment } from '../../../environments/environment'
 import { TokenStorageService } from '../service/token-storage.service'
 import { LoginRequest, LoginResponse } from './login.model'
 
