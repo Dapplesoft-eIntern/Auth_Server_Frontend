@@ -24,22 +24,17 @@ export class LoginApiService {
                     if (typeof response === 'string') {
                         // Raw token string
                         this.tokenStorageService.saveAccessToken(response)
-                        console.log(
-                            'Access token successfully saved (raw string).',
-                        )
                     } else if (response && typeof response === 'object') {
                         // JSON object with tokens
                         if (response.token) {
                             this.tokenStorageService.saveAccessToken(
                                 response.token,
                             )
-                            console.log('Access token successfully saved.')
                         }
                         if (response.refreshToken) {
                             this.tokenStorageService.saveRefreshToken(
                                 response.refreshToken,
                             )
-                            console.log('Refresh token successfully saved.')
                         }
                     } else {
                         console.warn(
