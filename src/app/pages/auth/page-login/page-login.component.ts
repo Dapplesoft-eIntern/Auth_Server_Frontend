@@ -51,7 +51,7 @@ export class PageLoginComponent {
                     // navigation happens ONLY when login API succeeded
                     setTimeout(() => {
                         this.router.navigate(['/admin/user'])
-                    }, 1500) // 1.5 sec
+                    }, 500) // 0.5 sec
                 },
 
                 error: (err: { error: { message: any } }) => {
