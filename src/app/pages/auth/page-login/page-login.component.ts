@@ -42,14 +42,6 @@ export class PageLoginComponent {
 
             this.loginApiService.login(formData).subscribe({
                 next: (response) => {
-                    // ⭐ Save tokens in localStorage
-                    if (typeof response === 'string') {
-                        // raw token
-                        this.tokenStorage.saveAccessToken(response)
-                    } else {
-                        this.tokenStorage.saveAccessToken(response.token)
-                        // this.tokenStorage.saveRefreshToken(response.refreshToken);
-                    }
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Login Successful',
