@@ -26,6 +26,7 @@ import { ToastModule } from 'primeng/toast'
 export class PageLoginComponent {
     constructor(
         private messageService: MessageService,
+
         private router: Router,
     ) {}
     loginData = {
