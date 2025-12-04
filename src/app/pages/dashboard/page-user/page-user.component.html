@@ -58,7 +58,7 @@
                     <th>Updated on</th>
                     <th>Status</th>
                     <th>Role</th>
-                    <th>Actions</th>
+                    <th pFrozenColumn alignFrozen="right">Actions</th>
                 </tr>
             </ng-template>
 
@@ -88,21 +88,23 @@
                             {{ user.role || 'User' }}
                         </span>
                     </td>
-                    <td class="flex gap-2">
-                        <button
-                            pButton
-                            type="button"
-                            class="p-button-sm p-button-info"
-                            (click)="openEditDialog(user)">
-                            Edit
-                        </button>
-                        <button
-                            pButton
-                            type="button"
-                            class="p-button-sm p-button-danger"
-                            (click)="deleteUser(user)">
-                            Delete
-                        </button>
+                    <td alignFrozen="right" pFrozenColumn>
+                        <div class="flex w-full items-center justify-end gap-2">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button-sm p-button-info"
+                                (click)="openEditDialog(user)">
+                                Edit
+                            </button>
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button-sm p-button-danger"
+                                (click)="deleteUser(user)">
+                                Delete
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </ng-template>
