@@ -13,10 +13,11 @@
         <form
             [formGroup]="signUpFormService.form"
             (ngSubmit)="onSubmit()"
-            class="my-1 space-y-6">
+            class="mt-6 space-y-3">
+
             <!-- Full Name -->
             <div>
-                <p-floatLabel class="w-full">
+                <p-floatLabel class="w-full" variant="on">
                     <input
                         pInputText
                         id="fullName"
@@ -47,7 +48,7 @@
 
             <!-- Phone -->
             <div>
-                <p-floatLabel class="w-full">
+                <p-floatLabel class="w-full" variant="on">
                     <input
                         pInputText
                         id="phone"
@@ -74,7 +75,7 @@
 
             <!-- Email -->
             <div>
-                <p-floatLabel class="w-full">
+                <p-floatLabel class="w-full" variant="on">
                     <input
                         pInputText
                         type="email"
@@ -94,7 +95,7 @@
 
             <!-- Password -->
             <div>
-                <p-floatLabel class="w-full">
+                <p-floatLabel class="w-full" variant="on">
                     <p-password
                         id="password"
                         formControlName="password"
@@ -118,7 +119,7 @@
 
             <!-- Confirm Password -->
             <div>
-                <p-floatLabel class="w-full">
+                <p-floatLabel class="w-full" variant="on">
                     <p-password
                         formControlName="confirmPassword"
                         id="confirmPassword"
