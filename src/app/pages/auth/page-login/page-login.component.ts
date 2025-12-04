@@ -34,7 +34,6 @@ export class PageLoginComponent {
         private router: Router,
         private messageService: MessageService,
         private loginApiService: LoginApiService,
-        private tokenStorage: TokenStorageService,
     ) {}
 
     togglePassword() {
