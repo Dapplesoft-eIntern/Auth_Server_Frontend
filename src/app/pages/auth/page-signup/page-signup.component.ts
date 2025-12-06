@@ -10,9 +10,9 @@ import { InputTextModule } from 'primeng/inputtext'
 import { PasswordModule } from 'primeng/password'
 import { ProgressSpinner } from 'primeng/progressspinner'
 import { ToastModule } from 'primeng/toast'
-import { SingUpFormService } from '../../../../libs/auth'
 import { LoginApiService } from '../../../../libs/auth/login/login-api.service'
 import { SignupApiService } from '../../../../libs/auth/signup/signup-api.service'
+import { SignUpFormService } from '../../../../libs/auth/signup/signup-form.service'
 import { authRoutes } from '../auth.route'
 
 @Component({
@@ -30,7 +30,7 @@ import { authRoutes } from '../auth.route'
         FloatLabelModule,
         ProgressSpinner,
     ],
-    providers: [MessageService, SingUpFormService],
+    providers: [MessageService, SignUpFormService],
     templateUrl: './page-signup.component.html',
 })
 export class PageSignupComponent {
@@ -40,7 +40,7 @@ export class PageSignupComponent {
     private signupApiService = inject(SignupApiService)
 
     constructor(
-        public signUpFormService: SingUpFormService,
+        public signUpFormService: SignUpFormService,
         private messageService: MessageService,
     ) {}
 

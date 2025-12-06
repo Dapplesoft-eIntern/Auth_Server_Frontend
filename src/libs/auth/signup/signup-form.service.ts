@@ -4,7 +4,7 @@ import { passwordMatchValidator } from './password-match.validator'
 import { SignUpRequest } from './signup.model'
 
 @Injectable()
-export class SingUpFormService {
+export class SignUpFormService {
     private fb = inject(NonNullableFormBuilder)
     form = this.buildForm()
 
