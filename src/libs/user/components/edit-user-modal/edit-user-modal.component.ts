@@ -9,6 +9,7 @@ import { AlertService } from '../../../common-service/lib/alert.service'
 import { UserFormService } from '../../user.form.service'
 import { User } from '../../user.model'
 import { UserApiService } from '../../user-api.service'
+import { UserStateService } from '../../user-state.service'
 
 @Component({
     selector: 'app-edit-user-modal',
@@ -24,7 +25,7 @@ import { UserApiService } from '../../user-api.service'
 })
 export class EditUserModalComponent {
     public userFormService = inject(UserFormService)
-    private userApiService = inject(UserApiService)
+    private userState = inject(UserStateService)
     private alertService = inject(AlertService)
     private ref = inject(DynamicDialogRef)
     private config = inject(DynamicDialogConfig)
@@ -55,7 +56,7 @@ export class EditUserModalComponent {
     }
 
     updateUser(userData: Partial<User>) {
-        this.userApiService.updateUser(userData).subscribe({
+        this.userState.updateUser(userData.id!, userData).subscribe({
             next: (res) => {
                 this.userFormService.form.reset()
                 this.isLoading.set(false)

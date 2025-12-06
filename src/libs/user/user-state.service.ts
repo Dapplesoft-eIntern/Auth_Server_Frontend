@@ -82,7 +82,7 @@ export class UserStateService {
         )
     }
 
-    updateUser(id: string, user: User): Observable<User> {
+    updateUser(id: string, user: Partial<User>): Observable<User> {
         this.startLoading()
 
         return this.dataService.updateUser(id, user).pipe(

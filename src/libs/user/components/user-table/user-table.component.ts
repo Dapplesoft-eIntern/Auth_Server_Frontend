@@ -61,19 +61,12 @@ export class UserTableComponent {
     }
 
     openEditDialog(user: User) {
-        const ref = this.dialogService.open(EditUserModalComponent, {
+        this.dialogService.open(EditUserModalComponent, {
             header: 'Edit: ' + user.fullName,
             data: { user },
             width: '50%',
             closable: true,
-        })
-
-        ref?.onClose.subscribe((updatedUser: User) => {
-            if (updatedUser) {
-                this.userState
-                    .updateUser(updatedUser.id, updatedUser)
-                    .subscribe()
-            }
+            baseZIndex: 10000,
         })
     }
 
