@@ -8,14 +8,14 @@ import {
     tap,
     throwError,
 } from 'rxjs'
-import { AlertService } from '../common-service/lib/alert.service'
 import { User } from './user.model'
-import { UserDataService } from './user-data.service'
+import { UserApiService } from './user-api.service'
 
 @Injectable({
     providedIn: 'root',
 })
 export class UserStateService {
+    private userApiService = inject(UserApiService)
     private reloadTrigger = new BehaviorSubject<void>(undefined)
     private loadingSubject = new BehaviorSubject<boolean>(false)
     private errorSubject = new BehaviorSubject<boolean>(false)
@@ -23,15 +23,13 @@ export class UserStateService {
     loading$ = this.loadingSubject.asObservable()
     error$ = this.errorSubject.asObservable()
 
-    constructor(private dataService: UserDataService) {}
-
     users$ = this.reloadTrigger.pipe(
         tap(() => {
             this.loadingSubject.next(true)
             this.errorSubject.next(false)
         }),
         switchMap(() =>
-            this.dataService.loadUsers().pipe(
+            this.userApiService.getUsers().pipe(
                 tap(() => this.loadingSubject.next(false)),
                 catchError((err) => {
                     this.loadingSubject.next(false)
@@ -70,7 +68,7 @@ export class UserStateService {
     addUser(user: User): Observable<User> {
         this.startLoading()
 
-        return this.dataService.addUser(user).pipe(
+        return this.userApiService.createUser(user).pipe(
             tap(() => {
                 this.stopLoading()
                 this.reload()
@@ -85,7 +83,7 @@ export class UserStateService {
     updateUser(id: string, user: Partial<User>): Observable<User> {
         this.startLoading()
 
-        return this.dataService.updateUser(id, user).pipe(
+        return this.userApiService.updateUser({ id, ...user }).pipe(
             tap(() => {
                 this.stopLoading()
                 this.reload()
@@ -100,7 +98,7 @@ export class UserStateService {
     deleteUser(user: User): Observable<void> {
         this.startLoading()
 
-        return this.dataService.deleteUser(user.id).pipe(
+        return this.userApiService.deleteUser(user.id).pipe(
             tap(() => {
                 this.stopLoading()
                 this.reload()
