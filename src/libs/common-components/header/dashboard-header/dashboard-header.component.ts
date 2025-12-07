@@ -10,7 +10,7 @@ import { AuthService } from '../../../auth/service/auth.service'
 export class DashboardHeaderComponent {
     private authService = inject(AuthService)
 
-    ngAfterViewInit(): void {
+    ngOnInit(): void {
         const sidebar = document.getElementById('sidebar')
         const toggle = document.getElementById('sidebarToggle')
 
