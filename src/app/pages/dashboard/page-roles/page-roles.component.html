@@ -1,8 +1,104 @@
-<!-- 
-<div class="mx-auto px-8 py-12">
-    <div class="flex justify-between py-6">
-        <h2>Role List</h2>
-       <p-button label="Add Role"></p-button>
+<p-toast></p-toast>
+
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Roles Management</h2>
+
+  <!-- Add Button -->
+  <div class="mb-3 flex justify-end">
+    <button
+      pButton
+      type="button"
+      label="Add New Role"
+      icon="pi pi-plus"
+      class="p-button-success"
+      (click)="openAddDialog()"
+    ></button>
+  </div>
+
+  <!-- Role Table -->
+  <p-table [value]="roles" class="p-datatable-sm shadow-md">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Role ID</th>
+        <th>Role Name</th>
+        <th>Description</th>
+        <th class="w-40">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-role>
+      <tr>
+        <td>{{ role.id }}</td>
+        <td>{{ role.role_name }}</td>
+        <td>{{ role.description }}</td>
+
+        <td class="flex gap-2">
+          <button
+            pButton
+            icon="pi pi-pencil"
+            class="p-button-warning p-button-sm"
+            (click)="openEditDialog(role)"
+          ></button>
+
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-danger p-button-sm"
+            (click)="deleteRole(role)"
+          ></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Dialog for Add / Edit -->
+<p-dialog
+  [(visible)]="displayDialog"
+  [modal]="true"
+  [style]="{ width: '450px' }"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="false"
+  header="{{ selectedRole ? 'Edit Role' : 'Add New Role' }}"
+>
+  <div class="p-fluid">
+    <div class="field mb-3">
+      <label for="role_name">Role Name</label>
+      <input
+        id="role_name"
+        type="text"
+        pInputText
+        [(ngModel)]="roleForm.role_name"
+        placeholder="Enter role name"
+      />
     </div>
-    <app-role-table />
-</div> -->
+
+    <div class="field mb-3">
+      <label for="description">Description</label>
+      <input
+        id="description"
+        type="text"
+        pInputText
+        [(ngModel)]="roleForm.description"
+        placeholder="Enter description"
+      />
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-2 mt-4">
+    <button
+      pButton
+      label="Cancel"
+      class="p-button-secondary"
+      (click)="cancelDialog()"
+    ></button>
+
+    <button
+      pButton
+      label="{{ selectedRole ? 'Update' : 'Save' }}"
+      class="p-button-success"
+      (click)="saveRole()"
+    ></button>
+  </div>
+</p-dialog>

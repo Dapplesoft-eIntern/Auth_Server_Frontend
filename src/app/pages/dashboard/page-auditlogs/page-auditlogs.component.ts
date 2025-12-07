@@ -1,106 +1,114 @@
 import { CommonModule } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
-import { FormsModule } from '@angular/forms'
-import { ConfirmationService, MessageService } from 'primeng/api'
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
+import { MessageService } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
-import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { DialogModule } from 'primeng/dialog'
 import { InputTextModule } from 'primeng/inputtext'
 import { TableModule } from 'primeng/table'
 import { ToastModule } from 'primeng/toast'
-import { AuditLog } from '../../../../libs/auditlogs/auditlog.model'
-import { AuditStateService } from '../../../../libs/auditlogs/auditlog-state.service'
+import { map, Observable } from 'rxjs'
+import { AuditApiService, AuditLog } from '../../../../libs/auditlogs'
 
 @Component({
-    selector: 'app-page-auditLogs',
+    selector: 'app-page-auditlogs',
     standalone: true,
     imports: [
         CommonModule,
-        FormsModule,
+        ReactiveFormsModule,
         TableModule,
-        DialogModule,
         ButtonModule,
         InputTextModule,
         ToastModule,
-        ConfirmDialogModule,
+        DialogModule,
     ],
-    templateUrl: './page-auditLogs.component.html',
-    providers: [MessageService, ConfirmationService],
+    templateUrl: './page-auditlogs.component.html',
+    providers: [MessageService],
 })
-export class PageAuditLogsRoutesComponent implements OnInit {
-    auditLogs: AuditLog[] = []
-    dialogVisible = false
-    editingLog: AuditLog = {} as AuditLog
-    isAddMode = false
+export class PageAuditLogsComponent implements OnInit {
+    auditLogs$!: Observable<AuditLog[]> // Observable for async table
+    logForm: FormGroup
+    showDialog = false
+    editingLog: AuditLog | null = null
 
     constructor(
-        private auditState: AuditStateService,
+        private fb: FormBuilder,
+        private auditService: AuditApiService,
         private messageService: MessageService,
-        private confirmationService: ConfirmationService,
-    ) {}
-
-    ngOnInit(): void {
-        this.loadAuditLogs()
-        this.auditState.loadLogs()
-    }
-
-    loadAuditLogs() {
-        this.auditState.logs$.subscribe({
-            next: (data) => {
-                this.auditLogs = data
-            },
+    ) {
+        this.logForm = this.fb.group({
+            user_name: [''],
+            business_name: [''],
+            action: [''],
+            description: [''],
         })
     }
 
-    openAddDialog() {
-        this.editingLog = {
-            id: 0,
-            user_name: '',
-            business_name: '',
-            action: '',
-            description: '',
-            created_at: '',
-        }
-        this.isAddMode = true
-        this.dialogVisible = true
+    ngOnInit(): void {
+        this.loadLogs()
     }
 
-    openEditDialog(log: AuditLog) {
-        this.editingLog = { ...log }
-        this.isAddMode = false
-        this.dialogVisible = true
+    loadLogs() {
+        this.auditLogs$ = this.auditService.getAll().pipe(
+            map((logs) => logs || []), // ensures table always gets an array
+        )
+    }
+
+    openForm(log: AuditLog | null = null) {
+        this.editingLog = log
+        if (log) {
+            this.logForm.patchValue(log)
+        } else {
+            this.logForm.reset()
+        }
+        this.showDialog = true
+    }
+
+    closeForm() {
+        this.showDialog = false
+        this.editingLog = null
     }
 
     saveLog() {
-        if (this.isAddMode) {
-            this.auditState.addLog(this.editingLog)
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Added',
-                detail: 'Audit log added successfully',
+        const data = this.logForm.value
+        if (this.editingLog) {
+            this.auditService.update(this.editingLog.id, data).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Updated',
+                        detail: 'Audit log updated',
+                    })
+                    this.loadLogs()
+                },
             })
         } else {
-            this.auditState.updateLog(this.editingLog.id, this.editingLog)
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Updated',
-                detail: 'Audit log updated successfully',
+            this.auditService.create(data).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Added',
+                        detail: 'Audit log added',
+                    })
+                    this.loadLogs()
+                },
             })
         }
-        this.dialogVisible = false
+        this.closeForm()
     }
 
     deleteLog(log: AuditLog) {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete this log?',
-            accept: () => {
-                this.auditState.deleteLog(log.id)
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Deleted',
-                    detail: 'Audit log deleted successfully',
-                })
-            },
-        })
+        if (confirm('Are you sure you want to delete this log?')) {
+            this.auditService.delete(log.id).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Deleted',
+                        detail: 'Audit log deleted',
+                    })
+                    this.loadLogs()
+                },
+            })
+        }
     }
 }

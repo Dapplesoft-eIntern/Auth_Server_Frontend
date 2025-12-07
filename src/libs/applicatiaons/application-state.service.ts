@@ -25,9 +25,9 @@ export class ApplicationStateService {
         this.applicationsSubject.next(current)
     }
 
-    deleteApplication(id: bigint) {
+    deleteApplication(id: string) {
         const current = this.applicationsSubject.value.filter(
-            (app) => app.id !== id,
+            (app) => app.id !== id, // string comparison
         )
         this.applicationsSubject.next(current)
     }

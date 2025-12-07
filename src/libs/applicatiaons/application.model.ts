@@ -1,5 +1,5 @@
 export interface Application {
-    id: bigint
+    id: string
     name: string
     client_id: string
     client_secret: string

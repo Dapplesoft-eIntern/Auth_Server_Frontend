@@ -1,45 +1,95 @@
-// import { HttpClient, HttpParams } from '@angular/common/http'
-// import { Inject, Injectable, inject } from '@angular/core'
-// import { Observable } from 'rxjs'
-// import { ApiService } from '../common-service/lib/api.service'
-// import { ENVIRONMENT, EnvironmentConfig } from '../core'
-// import { Role, RoleDto } from './role.model'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { catchError, map, Observable, throwError } from 'rxjs'
+import { environment } from '../../environments/environment.prod'
+import { Role } from './role.model'
 
-// @Injectable({
-//     providedIn: 'root',
-// })
-// export class RoleApiService extends ApiService<Role, RoleDto> {
-//     constructor(
-//         @Inject(ENVIRONMENT)
-//         private env: EnvironmentConfig,
-//     ) {
-//         super(inject(HttpClient), `${env.apiUrl}/roles`)
-//     }
+@Injectable({ providedIn: 'root' })
+export class RoleApiService {
+    private apiUrl = `${environment.apiUrl}/roles`
 
-//     findAllRoles(query: {
-//         status?: string
-//         search?: string
-//         selectedId?: string
-//         page?: number
-//         size?: number
-//     }): Observable<Role[]> {
-//         let params = new HttpParams()
-//         if (query.search) {
-//             params = params.set('search', query.search)
-//         }
-//         if (query.status) {
-//             params = params.set('selectedId', query.status)
-//         }
-//         if (query.page) {
-//             params = params.set('page', query.page)
-//         }
-//         if (query.size) {
-//             params = params.set('page', query.size)
-//         }
-//         return this.http.get<Role[]>(this.apiUrl)
-//     }
+    constructor(private http: HttpClient) {}
 
-//     crateNewRole(role: RoleDto): Observable<Role> {
-//         return this.http.post<Role>(this.apiUrl, role)
-//     }
-// }
+    private getAuthHeaders(): HttpHeaders {
+        const token = localStorage.getItem('jwtToken')
+        return new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: token ? `Bearer ${token}` : '',
+        })
+    }
+
+    // Convert backend Role → frontend Role
+    private toFrontend(role: any): Role {
+        return {
+            id: role.id,
+            role_name: role.roleName, // backend returns roleName (camelCase)
+            description: role.description,
+        }
+    }
+
+    // Convert form → backend DTO
+    private toDto(formValue: any): any {
+        return {
+            roleName: formValue.role_name, // backend expects roleName (camelCase)
+            description: formValue.description,
+        }
+    }
+
+    // GET all roles
+    getRoles(): Observable<Role[]> {
+        return this.http
+            .get<any[]>(this.apiUrl, { headers: this.getAuthHeaders() })
+            .pipe(
+                map((roles) => roles.map((r) => this.toFrontend(r))),
+                catchError(this.handleError),
+            )
+    }
+
+    // GET by ID
+    getById(id: number): Observable<Role> {
+        return this.http
+            .get<any>(`${this.apiUrl}/${id}`, {
+                headers: this.getAuthHeaders(),
+            })
+            .pipe(
+                map((role) => this.toFrontend(role)),
+                catchError(this.handleError),
+            )
+    }
+
+    // CREATE
+    create(formValue: any): Observable<Role> {
+        const dto = this.toDto(formValue)
+        return this.http
+            .post<any>(this.apiUrl, dto, { headers: this.getAuthHeaders() })
+            .pipe(
+                map((role) => this.toFrontend(role)),
+                catchError(this.handleError),
+            )
+    }
+
+    // UPDATE
+    update(id: number, formValue: any): Observable<Role> {
+        const dto = this.toDto(formValue)
+        return this.http
+            .put<any>(`${this.apiUrl}/${id}`, dto, {
+                headers: this.getAuthHeaders(),
+            })
+            .pipe(
+                map((role) => this.toFrontend(role)),
+                catchError(this.handleError),
+            )
+    }
+
+    // DELETE
+    deleteRole(id: number): Observable<any> {
+        return this.http
+            .delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
+            .pipe(catchError(this.handleError))
+    }
+
+    private handleError(error: any) {
+        console.error('API Error:', error)
+        return throwError(() => error)
+    }
+}

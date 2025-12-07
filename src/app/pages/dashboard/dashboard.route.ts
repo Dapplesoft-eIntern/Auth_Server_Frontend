@@ -7,7 +7,7 @@ export type DashboardRoutes = {
     userLoginHistory: Route
     businesses: Route
     member: Route
-    // roles: Route
+    roles: Route
     permissions: Route
     rolePermissions: Route
     applications: Route
@@ -60,14 +60,14 @@ export const dashboardRoutes: DashboardRoutes = {
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },
-    // roles: {
-    //     path: 'admin/roles',
-    //     loadComponent: () =>
-    //         import('./page-roles/page-roles.component').then(
-    //             (m) => m.PageRolesComponent,
-    //         ),
-    //     resolve: { layout: setLayout(PageLayout.Dashboard) },
-    // },
+    roles: {
+        path: 'admin/roles',
+        loadComponent: () =>
+            import('./page-roles/page-roles.component').then(
+                (m) => m.PageRolesComponent,
+            ),
+        resolve: { layout: setLayout(PageLayout.Dashboard) },
+    },
     permissions: {
         path: 'admin/permissions',
         loadComponent: () =>
@@ -80,7 +80,7 @@ export const dashboardRoutes: DashboardRoutes = {
         path: 'admin/role-permissions',
         loadComponent: () =>
             import(
-                './page-rolePermissions/page-rolePermissions.component'
+                './page-rolepermissions/page-rolepermissions.component'
             ).then((m) => m.RolePermissionsRoutes),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },
@@ -112,7 +112,7 @@ export const dashboardRoutes: DashboardRoutes = {
     passwordResets: {
         path: 'admin/password-resets',
         loadComponent: () =>
-            import('./page-passwordResets/page-passwordResets.component').then(
+            import('./page-passwordresets/page-passwordresets.component').then(
                 (m) => m.PagePasswordResetsComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
@@ -120,7 +120,7 @@ export const dashboardRoutes: DashboardRoutes = {
     mfaSettings: {
         path: 'admin/mfa-settings',
         loadComponent: () =>
-            import('./page-mfaSettings/page-mfaSettings.component').then(
+            import('./page-mfasettings/page-mfasettings.component').then(
                 (m) => m.PageMfaSettingsComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
@@ -128,7 +128,7 @@ export const dashboardRoutes: DashboardRoutes = {
     mfaLogs: {
         path: 'admin/mfa-logs',
         loadComponent: () =>
-            import('./page-mfaLogs/page-mfaLogs.component').then(
+            import('./page-mfalogs/page-mfalogs.component').then(
                 (m) => m.PageMfaLogsRoutesComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
@@ -136,8 +136,8 @@ export const dashboardRoutes: DashboardRoutes = {
     auditLogs: {
         path: 'admin/audit-logs',
         loadComponent: () =>
-            import('./page-auditLogs/page-auditLogs.component').then(
-                (m) => m.PageAuditLogsRoutesComponent,
+            import('./page-auditlogs/page-auditlogs.component').then(
+                (m) => m.PageAuditLogsComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },
