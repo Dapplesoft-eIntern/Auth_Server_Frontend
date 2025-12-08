@@ -1,45 +1,29 @@
-// import { HttpClient, HttpParams } from '@angular/common/http'
-// import { Inject, Injectable, inject } from '@angular/core'
-// import { Observable } from 'rxjs'
-// import { ApiService } from '../common-service/lib/api.service'
-// import { ENVIRONMENT, EnvironmentConfig } from '../core'
-// import { Role, RoleDto } from './role.model'
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Inject, Injectable, inject } from '@angular/core'
+import { Observable } from 'rxjs'
+import { environment } from '../../environments/environment.prod'
+import { ApiService } from '../common-service/lib/api.service'
+import { Role } from './role.model'
 
-// @Injectable({
-//     providedIn: 'root',
-// })
-// export class RoleApiService extends ApiService<Role, RoleDto> {
-//     constructor(
-//         @Inject(ENVIRONMENT)
-//         private env: EnvironmentConfig,
-//     ) {
-//         super(inject(HttpClient), `${env.apiUrl}/roles`)
-//     }
+@Injectable({
+    providedIn: 'root',
+})
+export class RoleApiService {
+    private apiUrl = `${environment.apiUrl}`
 
-//     findAllRoles(query: {
-//         status?: string
-//         search?: string
-//         selectedId?: string
-//         page?: number
-//         size?: number
-//     }): Observable<Role[]> {
-//         let params = new HttpParams()
-//         if (query.search) {
-//             params = params.set('search', query.search)
-//         }
-//         if (query.status) {
-//             params = params.set('selectedId', query.status)
-//         }
-//         if (query.page) {
-//             params = params.set('page', query.page)
-//         }
-//         if (query.size) {
-//             params = params.set('page', query.size)
-//         }
-//         return this.http.get<Role[]>(this.apiUrl)
-//     }
+    constructor(private http: HttpClient) {}
 
-//     crateNewRole(role: RoleDto): Observable<Role> {
-//         return this.http.post<Role>(this.apiUrl, role)
-//     }
-// }
+    getRoles(): Observable<Role[]> {
+        return this.http.get<Role[]>(this.apiUrl + '/roles')
+    }
+    createRole(role: Role): Observable<Role> {
+        return this.http.post<Role>(this.apiUrl, role)
+    }
+    updateRole(id: string, data: Partial<Role>): Observable<Role> {
+        return this.http.put<Role>(`${this.apiUrl}/roles/${id}`, data)
+    }
+
+    deleteRole(id: string): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/roles/${id}`)
+    }
+}
