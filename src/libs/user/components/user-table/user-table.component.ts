@@ -54,6 +54,7 @@ export class UserTableComponent {
         this.userState.users$.subscribe({
             next: (data) => {
                 this.users = data
+                console.log(data)
                 this.isLoading = false
                 this.cdr.markForCheck() // Manually trigger change detection
             },

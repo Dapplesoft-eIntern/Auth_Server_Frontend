@@ -12,6 +12,6 @@ export const environment: EnvironmentConfig = {
 //     BaseUrl: 'http://localhost:4200',
 //     appName: 'Auth-server',
 //     production: false,
-//     apiUrl: 'http://localhost:5000/api',
+//     apiUrl: 'http://localhost:5000',
 //     authApiUrl: 'http://localhost:5000/api',
 // }
