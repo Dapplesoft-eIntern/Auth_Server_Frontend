@@ -92,7 +92,7 @@ export class CountryStateService {
 
     deleteCountry(id: string): Observable<void> {
         this.startLoading()
-        return this.countryApiService.deleteCountries(String(id)).pipe(
+        return this.countryApiService.deleteCountries(id).pipe(
             tap(() => {
                 this.stopLoading()
                 this.reload()
