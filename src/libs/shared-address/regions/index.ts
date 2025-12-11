@@ -1,5 +1,5 @@
 export * from './components/regions-modal/regions-modal.component'
-export * from './components/regions-table/regions-table.componet'
+export * from './components/regions-table/regions-table.component'
 export * from './regions.model'
 export * from './regions-api.service'
 export * from './regions-form.service'

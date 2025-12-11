@@ -66,12 +66,12 @@ export class RegionModalComponent {
             next: (newRegion) => {
                 this.regionFormService.form.reset()
                 this.isLoading.set(false)
-                this.alertService.success('Country added successfully')
+                this.alertService.success('Region added successfully')
                 this.ref.close(newRegion)
             },
             error: () => {
                 this.isLoading.set(false)
-                this.alertService.error('Failed to add country')
+                this.alertService.error('Failed to add region')
             },
         })
     }

@@ -46,7 +46,7 @@ export class RegionTableComponent {
 
     ngOnInit(): void {
         this.isLoading = true
-        this.regionState.retion$.subscribe({
+        this.regionState.region$.subscribe({
             next: (data) => {
                 this.region = data
                 console.log(data)
@@ -68,7 +68,7 @@ export class RegionTableComponent {
         })
     }
 
-    deleteRigion(region: Region) {
+    deleteRegion(region: Region) {
         this.confirmationService.confirm({
             header: 'Delete Confirmation',
             message: `Are you sure you want to delete ${region.name}?`,

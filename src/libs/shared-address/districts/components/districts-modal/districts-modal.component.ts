@@ -66,19 +66,19 @@ export class DistrictModalComponent {
             next: (newRegion) => {
                 this.districtFormService.form.reset()
                 this.isLoading.set(false)
-                this.alertService.success('Country added successfully')
+                this.alertService.success('District added successfully')
                 this.ref.close(newRegion)
             },
             error: () => {
                 this.isLoading.set(false)
-                this.alertService.error('Failed to add country')
+                this.alertService.error('Failed to add District')
             },
         })
     }
 
     updateDistrict(districtData: Partial<District>) {
         this.districtState
-            .updateCountry(districtData.id!, districtData)
+            .updateDistrict(districtData.id!, districtData)
             .subscribe({
                 next: () => {
                     this.districtFormService.form.reset()

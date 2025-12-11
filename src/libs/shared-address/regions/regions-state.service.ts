@@ -24,7 +24,7 @@ export class RegionStateService {
     loading$ = this.loadingSubject.asObservable()
     error$ = this.errorSubject.asObservable()
 
-    retion$ = this.reloadTrigger.pipe(
+    region$ = this.reloadTrigger.pipe(
         tap(() => this.startLoading()),
         switchMap(() =>
             this.regionApiService.getRegions().pipe(

@@ -12,7 +12,7 @@ export class AreaFormService {
         this.form = this.buildForm()
     }
     buildForm(): FormGroup {
-        const { required, minLength, pattern } = Validators
+        const { required, minLength } = Validators
 
         return this.fb.group({
             id: [null],

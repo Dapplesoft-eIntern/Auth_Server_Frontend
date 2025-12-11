@@ -73,7 +73,7 @@ export class DistrictStateService {
         )
     }
 
-    updateCountry(
+    updateDistrict(
         id: string,
         updatedData: Partial<District>,
     ): Observable<District> {
