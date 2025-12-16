@@ -53,7 +53,7 @@ export class CountryTableComponent {
                 this.alertService.success('Country deleted successfully')
             },
             error: () => {
-                this.alertService.error('Failed country delete')
+                this.alertService.error('Failed to delete country')
             },
         })
     }

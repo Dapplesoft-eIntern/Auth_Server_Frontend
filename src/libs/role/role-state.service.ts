@@ -61,7 +61,6 @@ export class RoleListStateService extends SimpleStore<RoleState> {
             )
             .subscribe({
                 next: (roles) => {
-                    console.log('LOG data', roles)
                     this.setState({ roles, loading: false })
                 },
                 error: () => {

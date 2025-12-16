@@ -64,7 +64,7 @@ export const dashboardRoutes: DashboardRoutes = {
         path: 'admin/roles',
         loadComponent: () =>
             import('./page-roles/page-roles.component').then(
-                (m) => m.PageRoleComponent,
+                (m) => m.PageRolesComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },

@@ -10,7 +10,7 @@ import { RoleTableComponent } from '../../../../libs/role/components/role-table/
     styleUrl: './page-roles.component.css',
     providers: [RoleListStateService],
 })
-export class PageRoleComponent implements OnInit {
+export class PageRolesComponent implements OnInit {
     private roleListStateService = inject(RoleListStateService)
 
     ngOnInit(): void {
