@@ -3,19 +3,13 @@ import { PageLayout, setLayout } from '../../../libs/common-components'
 
 export type DashboardRoutes = {
     user: Route
-    profile: Route
     userLoginHistory: Route
-    businesses: Route
-    member: Route
     roles: Route
     permissions: Route
     rolePermissions: Route
     applications: Route
     tokens: Route
-    emailVerifications: Route
     passwordResets: Route
-    mfaSettings: Route
-    mfaLogs: Route
     auditLogs: Route
 }
 
@@ -28,35 +22,11 @@ export const dashboardRoutes: DashboardRoutes = {
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },
-    profile: {
-        path: 'admin/profile',
-        loadComponent: () =>
-            import('./page-user-profile/page-profile.component').then(
-                (m) => m.PageProfileComponent,
-            ),
-        resolve: { layout: setLayout(PageLayout.Dashboard) },
-    },
     userLoginHistory: {
         path: 'admin/user-Login-history',
         loadComponent: () =>
             import('./page-user-history/page-user-history.component').then(
                 (m) => m.PageUserHistoryComponent,
-            ),
-        resolve: { layout: setLayout(PageLayout.Dashboard) },
-    },
-    businesses: {
-        path: 'admin/businesses',
-        loadComponent: () =>
-            import('./page-businesses/page-businesses.component').then(
-                (m) => m.PageBusinessesComponent,
-            ),
-        resolve: { layout: setLayout(PageLayout.Dashboard) },
-    },
-    member: {
-        path: 'admin/member',
-        loadComponent: () =>
-            import('./page-member/page-member.component').then(
-                (m) => m.PageMemberComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },
@@ -101,35 +71,11 @@ export const dashboardRoutes: DashboardRoutes = {
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },
-    emailVerifications: {
-        path: 'admin/emailVerifications',
-        loadComponent: () =>
-            import(
-                './page-emailVerifications/page-emailVerifications.component'
-            ).then((m) => m.PageEmailVerificationsComponent),
-        resolve: { layout: setLayout(PageLayout.Dashboard) },
-    },
     passwordResets: {
         path: 'admin/password-resets',
         loadComponent: () =>
             import('./page-passwordResets/page-passwordResets.component').then(
                 (m) => m.PagePasswordResetsComponent,
-            ),
-        resolve: { layout: setLayout(PageLayout.Dashboard) },
-    },
-    mfaSettings: {
-        path: 'admin/mfa-settings',
-        loadComponent: () =>
-            import('./page-mfaSettings/page-mfaSettings.component').then(
-                (m) => m.PageMfaSettingsComponent,
-            ),
-        resolve: { layout: setLayout(PageLayout.Dashboard) },
-    },
-    mfaLogs: {
-        path: 'admin/mfa-logs',
-        loadComponent: () =>
-            import('./page-mfaLogs/page-mfaLogs.component').then(
-                (m) => m.PageMfaLogsRoutesComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },

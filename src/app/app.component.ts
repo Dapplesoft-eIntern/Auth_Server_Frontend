@@ -11,7 +11,6 @@ import {
     LayoutPublicComponent,
     PageLayout,
     PageLayoutService,
-    PublicFooterComponent,
 } from '../libs/common-components'
 
 @Component({
