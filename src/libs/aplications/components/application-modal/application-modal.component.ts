@@ -14,7 +14,7 @@ import { ApplicationFormService } from '../../application-form.service'
     templateUrl: './application-modal.component.html',
     styleUrl: './application-modal.component.css',
 })
-export class CreateApplicationModalComponent {
+export class ApplicationModalComponent {
     protected applicationFormService = inject(ApplicationFormService)
     private applicationApiService = inject(ApplicationApiService)
     private alertService = inject(AlertService)

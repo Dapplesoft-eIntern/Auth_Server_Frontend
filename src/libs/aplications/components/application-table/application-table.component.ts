@@ -5,7 +5,7 @@ import { AlertService } from '../../../common-service/lib/alert.service'
 import { PrimeModules } from '../../../prime-modules'
 import { Application } from '../../application.model'
 import { ApplicationListStateService } from '../../application-state.service'
-import { CreateApplicationModalComponent } from '../application-modal/application-modal.component'
+import { ApplicationModalComponent } from '../application-modal/application-modal.component'
 
 @Component({
     selector: 'app-application-table',
@@ -19,7 +19,7 @@ export class ApplicationTableComponent {
     private alertService = inject(AlertService)
 
     addApplication() {
-        const ref = this.dialogService.open(CreateApplicationModalComponent, {
+        const ref = this.dialogService.open(ApplicationModalComponent, {
             header: 'Add project',
             width: '50%',
             closable: true,
@@ -33,7 +33,7 @@ export class ApplicationTableComponent {
     }
 
     editApplication(application: Application) {
-        const ref = this.dialogService.open(CreateApplicationModalComponent, {
+        const ref = this.dialogService.open(ApplicationModalComponent, {
             header: 'Edit project',
             width: '50%',
             closable: true,
