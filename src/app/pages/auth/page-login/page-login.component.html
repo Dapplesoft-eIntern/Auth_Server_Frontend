@@ -18,7 +18,6 @@
             (ngSubmit)="onSubmit()"
             class="space-y-4">
 
-            <!--Email-->
             <div>
                 <p-floatLabel class="w-full" variant="on">
                     <input
@@ -27,7 +26,7 @@
                         id="email"
                         formControlName="email"
                         class="w-full" />
-                    <label for="email">Enter your email</label>
+                    <label for="email">Enter your email or phone</label>
                 </p-floatLabel>
 
                 @if (
@@ -38,7 +37,6 @@
                 }
             </div>
 
-            <!--Password-->
             <p-floatLabel class="w-full" variant="on">
                 <p-password
                     id="password"
@@ -73,43 +71,12 @@
                     Log in
                 </button>
             }
-            <!-- Progress Spinner -->
             @else {
                 <div class="flex h-full items-center justify-center">
                     <p-progressSpinner class="h-10 w-10"></p-progressSpinner>
                 </div>
             }
         </form>
-
-        <div class="my-6 flex items-center">
-            <hr class="flex-1 border-gray-300" />
-            <span class="px-3 text-sm text-gray-500">OR</span>
-            <hr class="flex-1 border-gray-300" />
-        </div>
-
-        <div class="space-y-3">
-            <div class="mt-4 flex justify-center gap-6">
-                <div
-                    class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:bg-gray-100">
-                    <img
-                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
-                        class="h-6 w-6" />
-                </div>
-
-                <div
-                    class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:bg-gray-100">
-                    <img
-                        src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"
-                        class="h-6 w-6" />
-                </div>
-
-                <div
-                    class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full transition-all duration-200 hover:bg-gray-100">
-                    <img
-                        src="./../../../../assets/images/Microsoft.webp"
-                        class="h-6 w-6" />
-                </div>
-            </div>
 
             <p class="mt-8 text-center text-sm text-gray-500">
                 Don’t have an account?
@@ -120,5 +87,4 @@
                 >
             </p>
         </div>
-    </div>
 </div>
