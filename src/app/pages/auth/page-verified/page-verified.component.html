@@ -1,3 +1,5 @@
+
+
 <p-toast></p-toast>
 
 <div class="flex h-screen items-center justify-center bg-gray-100">
@@ -18,7 +20,9 @@
             </p>
         </div>
 
+
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+
             <div>
                 <p-floatLabel class="w-full" variant="on">
                     <input
@@ -27,11 +31,8 @@
                         type="text"
                         formControlName="identifier"
                         class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-200 hover:border-green-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
-
-                    <label
-                        for="identifier"
-                        class="text-sm font-medium text-green-300">
-                        Email or Phone Number     
+                    <label for="identifier">
+                        Email or Phone Number
                     </label>
                 </p-floatLabel>
 
@@ -52,7 +53,10 @@
                 pButton
                 type="submit"
                 label="Send OTP"
-                class="w-full rounded-md bg-blue-400 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-blue-600 active:scale-[0.98]"></button>
+                class="w-full rounded-md bg-blue-400 py-2 text-sm font-medium
+                       text-white transition-all duration-200
+                       hover:bg-blue-600 active:scale-[0.98]">
+            </button>
         </form>
     </div>
 </div>
