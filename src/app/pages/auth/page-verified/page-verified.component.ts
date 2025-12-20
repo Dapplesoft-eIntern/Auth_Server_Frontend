@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component } from '@angular/core'
 import {
+    AbstractControl,
     FormBuilder,
     FormGroup,
     ReactiveFormsModule,
@@ -10,8 +11,8 @@ import { Router } from '@angular/router'
 import { MessageService } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { FloatLabelModule } from 'primeng/floatlabel'
-import { InputMaskModule } from 'primeng/inputmask'
 import { ToastModule } from 'primeng/toast'
+
 @Component({
     selector: 'app-verified',
     standalone: true,
@@ -19,7 +20,6 @@ import { ToastModule } from 'primeng/toast'
         CommonModule,
         ReactiveFormsModule,
         ButtonModule,
-        InputMaskModule,
         ToastModule,
         FloatLabelModule,
     ],
@@ -28,7 +28,6 @@ import { ToastModule } from 'primeng/toast'
 })
 export class PageVerifiedComponent {
     form: FormGroup
-    selectedTab: 'email' | 'phone' = 'email'
     submitted = false
 
     constructor(
@@ -37,30 +36,22 @@ export class PageVerifiedComponent {
         private router: Router,
     ) {
         this.form = this.fb.group({
-            email: ['', [Validators.email]],
-            phone: [''],
+            identifier: ['', [Validators.required, this.emailOrPhoneValidator]],
         })
-        this.setValidators()
     }
 
-    selectTab(tab: 'email' | 'phone') {
-        this.selectedTab = tab
-        this.submitted = false
-        this.setValidators()
-    }
+    emailOrPhoneValidator(control: AbstractControl) {
+        const value = control.value
+        if (!value) return null
 
-    setValidators() {
-        if (this.selectedTab === 'email') {
-            this.form
-                .get('email')
-                ?.setValidators([Validators.required, Validators.email])
-            this.form.get('phone')?.clearValidators()
-        } else {
-            this.form.get('phone')?.setValidators([Validators.required])
-            this.form.get('email')?.clearValidators()
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        const phoneRegex = /^[0-9]{11}$/
+
+        if (emailRegex.test(value) || phoneRegex.test(value)) {
+            return null
         }
-        this.form.get('email')?.updateValueAndValidity()
-        this.form.get('phone')?.updateValueAndValidity()
+
+        return { invalidFormat: true }
     }
 
     get f() {
@@ -74,33 +65,25 @@ export class PageVerifiedComponent {
             this.messageService.add({
                 severity: 'error',
                 summary: 'Error',
-                detail: 'Please fill in the required fields correctly.',
+                detail: 'Enter a valid email or phone number.',
             })
             return
         }
 
-        const payload =
-            this.selectedTab === 'email'
-                ? { email: this.form.value.email }
-                : { phone: this.form.value.phone }
+        const value = this.form.value.identifier
+        const method = value.includes('@') ? 'email' : 'phone'
 
-        console.log('Send OTP to:', payload)
+        console.log('Send OTP to:', value)
 
         this.messageService.add({
             severity: 'success',
             summary: 'OTP Sent',
-            detail: `OTP sent to ${this.selectedTab}`,
+            detail: `OTP sent to your ${method}`,
         })
 
         setTimeout(() => {
             this.router.navigate(['/verifiedotp'], {
-                state: {
-                    method: this.selectedTab,
-                    value:
-                        this.selectedTab === 'email'
-                            ? this.form.value.email
-                            : this.form.value.phone,
-                },
+                state: { method, value },
             })
         }, 1500)
     }
