@@ -24,7 +24,7 @@ import { OtpStateService } from '../../../../libs/otp/otp-state.service'
         ToastModule,
         FloatLabelModule,
     ],
-    templateUrl: './page-verified.component.html', // ✅ Correct template
+    templateUrl: './page-verified.component.html', //  Correct template
     providers: [MessageService],
 })
 export class PageVerifiedComponent implements OnInit {
@@ -63,7 +63,7 @@ export class PageVerifiedComponent implements OnInit {
         return { invalidFormat: true }
     }
 
-    // ✅ This getter must exist for the template
+    //  This getter must exist for the template
     get f() {
         return this.form.controls
     }
