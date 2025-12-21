@@ -44,18 +44,21 @@ export class EditUserModalComponent {
     submit(event: Event) {
         this.isLoading.set(true)
         event.preventDefault()
+
         const selectedUser = this.config.data?.user
         const formValue = this.userFormService.getValue()
 
-        const userData: Partial<User> = {
-            ...formValue,
-            id: selectedUser.id,
+        // Merge existing user with form values
+        const userData: User = {
+            ...selectedUser, // keep all existing fields
+            ...formValue, // overwrite with updated form fields
+            id: selectedUser.id, // ensure id is preserved
         }
 
         this.updateUser(userData)
     }
 
-    updateUser(user: Partial<User>) {
+    updateUser(user: User) {
         const ref = this.userState.updateUser(user.id, user).subscribe({
             next: (updatedUser) => {
                 this.isLoading.set(false)
