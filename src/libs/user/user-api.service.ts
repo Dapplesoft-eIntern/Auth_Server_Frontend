@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { environment } from '../../environments/environment.prod'
+import { environment } from '../../environments/environment'
 import { User } from './user.model'
 
 @Injectable({
@@ -13,7 +13,7 @@ export class UserApiService {
     constructor(private http: HttpClient) {}
 
     getUsers(): Observable<User[]> {
-        return this.http.get<User[]>(this.apiUrl + '/users/get-all')
+        return this.http.get<User[]>(this.apiUrl + '/users')
     }
 
     createUser(user: User): Observable<User> {
@@ -22,12 +22,12 @@ export class UserApiService {
 
     updateUser(userData: Partial<User>): Observable<User> {
         return this.http.put<User>(
-            `${this.apiUrl}/users/update/${userData.id}`,
+            `${this.apiUrl}/users/${userData.id}`,
             userData,
         )
     }
 
     deleteUser(id: string): Observable<void> {
-        return this.http.delete<void>(`${this.apiUrl}/users/delete/${id}`)
+        return this.http.delete<void>(`${this.apiUrl}/users/${id}`)
     }
 }
