@@ -55,7 +55,6 @@ export class LoginApiService {
         }
 
         const returnUrl = this.route.snapshot.queryParams['ReturnUrl']
-        // Or 'returnUrl' (lowercase) depending on how you read it
 
         if (returnUrl && returnUrl.startsWith('/')) {
             const baseUrl = this.apiUrl.replace(/\/api$/, '')
