@@ -13,7 +13,7 @@ export class TokenApiService extends ApiService<Token, TokenDto> {
         @Inject(ENVIRONMENT)
         private env: EnvironmentConfig,
     ) {
-        super(inject(HttpClient), `${env.apiUrl}/client-apps`)
+        super(inject(HttpClient), `${env.apiUrl}/tokens`)
     }
 
     findAllTokens(query?: {

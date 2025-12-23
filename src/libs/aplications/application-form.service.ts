@@ -13,12 +13,12 @@ export class ApplicationFormService {
     }
 
     buildForm(): FormGroup {
-        const { required, minLength } = Validators
+        const { required, minLength, pattern } = Validators
 
         return this.fb.group({
-            displayName: ['', [required, minLength(2)]],
-            clientId: ['', [required, minLength(2)]],
-            clientSecret: ['', [required, minLength(2)]],
+            displayName: ['', [required, minLength(3), pattern(/^[A-Za-z]+(?: [A-Za-z]+)*$/)],],
+            clientId: ['', [required, minLength(6), pattern(/^[A-Za-z0-9]*$/)]],
+            clientSecret: ['', [required, minLength(10), pattern(/^[\x21-\x7E]+$/)]],
             redirectUris: ['', [required]],
         })
     }
