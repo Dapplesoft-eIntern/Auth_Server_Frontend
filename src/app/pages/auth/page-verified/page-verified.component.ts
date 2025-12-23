@@ -1,85 +1,121 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import {
+    AbstractControl,
     FormBuilder,
     FormGroup,
     ReactiveFormsModule,
     Validators,
 } from '@angular/forms'
-import { Router, RouterModule } from '@angular/router'
+import { Router } from '@angular/router'
 import { MessageService } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
-import { CardModule } from 'primeng/card'
-import { CheckboxModule } from 'primeng/checkbox'
-import { InputMaskModule } from 'primeng/inputmask'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { ToastModule } from 'primeng/toast'
+import { OtpStateService } from '../../../../libs/otp/otp-state.service'
 
 @Component({
     selector: 'app-verified',
     standalone: true,
     imports: [
-        ReactiveFormsModule,
         CommonModule,
-        RouterModule,
-        ToastModule,
-        InputMaskModule,
-        CheckboxModule,
+        ReactiveFormsModule,
         ButtonModule,
-        CardModule,
+        ToastModule,
+        FloatLabelModule,
     ],
+    templateUrl: './page-verified.component.html', //  Correct template
     providers: [MessageService],
-    templateUrl: './page-verified.component.html',
 })
-export class PageVerifiedComponent {
-    fb = inject(FormBuilder)
-    router = inject(Router)
-    messageService = inject(MessageService)
+export class PageVerifiedComponent implements OnInit {
+    form: FormGroup
+    submitted = false
+    loading = false
 
-    form: FormGroup = this.fb.group({
-        phone: [
-            '',
-            [
-                Validators.required,
-                Validators.minLength(11),
-                Validators.maxLength(11),
-                Validators.pattern(/^\d{11}$/),
-            ],
-        ],
-        rememberMe: [false],
-    })
+    private otpStateService = inject(OtpStateService)
 
-    get phoneControl() {
-        return this.form.get('phone')
+    constructor(
+        private fb: FormBuilder,
+        private messageService: MessageService,
+        private router: Router,
+    ) {
+        this.form = this.fb.group({
+            identifier: ['', [Validators.required, this.emailOrPhoneValidator]],
+        })
+    }
+
+    ngOnInit() {
+        // Optional: Clear previous state when component initializes
+        this.otpStateService.clearOtpState()
+    }
+
+    emailOrPhoneValidator(control: AbstractControl) {
+        const value = control.value
+        if (!value) return null
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+        const phoneRegex = /^[0-9]{11}$/
+
+        if (emailRegex.test(value) || phoneRegex.test(value)) {
+            return null
+        }
+
+        return { invalidFormat: true }
+    }
+
+    //  This getter must exist for the template
+    get f() {
+        return this.form.controls
     }
 
     onSubmit() {
-        this.form.markAllAsTouched()
+        this.submitted = true
 
-        if (this.form.valid) {
-            const phone = this.form.value.phone
-            console.log('Phone is valid ->', phone)
-
-            this.messageService.add({
-                severity: 'success',
-                summary: 'OTP Sent!',
-                detail: `OTP was sent to ${phone}`,
-                life: 1500,
-            })
-
-            setTimeout(() => this.router.navigate(['/verifiedotp']), 1500)
-        } else {
+        if (this.form.invalid) {
             this.messageService.add({
                 severity: 'error',
-                summary: 'Invalid Phone',
-                detail: 'Please enter a valid 11-digit phone number.',
-                life: 2000,
+                summary: 'Error',
+                detail: 'Enter a valid email or phone number.',
             })
+            return
         }
-    }
 
-    onPhoneInput(event: Event) {
-        const input = event.target as HTMLInputElement
-        input.value = input.value.replace(/\D/g, '').slice(0, 11)
-        this.phoneControl?.setValue(input.value, { emitEvent: false })
+        const identifier = this.form.value.identifier
+        this.loading = true
+
+        // Store identifier in state service
+        this.otpStateService.setIdentifier(identifier)
+
+        // Call Send OTP API through state service
+        this.otpStateService.sendOtp().subscribe({
+            next: () => {
+                this.loading = false
+                const state = this.otpStateService.getState()
+                const method = state.method
+
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'OTP Sent',
+                    detail: `OTP sent to your ${method}`,
+                })
+
+                setTimeout(() => {
+                    this.router.navigate(['/verifiedotp'])
+                }, 1500)
+            },
+            error: (error) => {
+                this.loading = false
+                const state = this.otpStateService.getState()
+                const errorMessage =
+                    state.errorMessage ||
+                    'Failed to send OTP. Please try again.'
+                console.error('Error sending OTP:', error)
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: errorMessage,
+                })
+            },
+        })
     }
 }

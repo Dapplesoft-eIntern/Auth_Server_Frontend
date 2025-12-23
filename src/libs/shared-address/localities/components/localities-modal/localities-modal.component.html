@@ -1,0 +1,70 @@
+
+<div class="bg-surface-50 p-4 rounded-md shadow-sm">
+  <form [formGroup]="localitieFormService.form" class="grid grid-cols-1 gap-6" (ngSubmit)="submit($event)">
+    
+    <div class="w-full">
+      <label for="countryId" class="text-surface-900 font-medium">Country Id</label>
+      <input
+        pInputText
+        id="countryId"
+        type="text"
+        placeholder="Enter country id"
+        formControlName="countryId"
+        class="w-full rounded-md px-3 py-2 shadow-sm" />
+    </div>
+
+    <div class="w-full">
+      <label for="areaId" class="text-surface-900 font-medium">Area Id</label>
+      <input
+        pInputText
+        id="areaId"
+        type="text"
+        placeholder="Enter area id"
+        formControlName="areaId"
+        class="w-full rounded-md px-3 py-2 shadow-sm" />
+    </div>
+
+    <div class="w-full">
+      <label for="name" class="text-surface-900 font-medium">Name</label>
+      <input
+        pInputText
+        id="name"
+        type="text"
+        placeholder="Enter name"
+        formControlName="name"
+        class="w-full rounded-md px-3 py-2 shadow-sm" />
+    </div>
+
+    <div class="w-full">
+      <label for="type" class="text-surface-900 font-medium">Type</label>
+      <input
+        pInputText
+        id="type"
+        type="text"
+        placeholder="Enter type"
+        formControlName="type"
+        class="w-full rounded-md px-3 py-2 shadow-sm" />
+    </div>
+
+    <div class="w-full">
+      <label for="typeName" class="text-surface-900 font-medium">Type Name</label>
+      <input
+        pInputText
+        id="typeName"
+        type="text"
+        placeholder="Enter type name"
+        formControlName="typeName"
+        class="w-full rounded-md px-3 py-2 shadow-sm" />
+    </div>
+
+    <p-button
+      [label]="isEditMode() ? 'Update Localitie' : 'Add Localitie'"
+      [loading]="isLoading()"
+      [disabled]="isLoading() || localitieFormService.form.invalid"
+      type="submit"
+      class="mt-4 w-full flex items-center justify-center gap-2 rounded-md py-2">
+      <i pButtonIcon class="pi pi-save"></i>
+    </p-button>
+
+  </form>
+</div>

@@ -1,0 +1,84 @@
+
+
+<p-confirmDialog></p-confirmDialog>
+
+@let state = localitieListStateService.selectAll() | async;
+@let loading = localitieListStateService.select('loading') | async;
+@let localities = state?.localities;
+
+@if (loading) {
+    <div class="flex items-center justify-center py-8">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: green"></i>
+    </div>
+} @else if (localities?.length) {
+    <div class="max-h-[70vh] rounded-md">
+        <div class="mb-4 flex flex-col items-center justify-between gap-4 md:flex-row">
+            <h2 class="text-xl font-bold">Localities Page</h2>
+
+            <div class="flex w-full items-center gap-2 md:w-auto">
+                <p-button
+                    label="Add Locality"
+                    icon="pi pi-plus"
+                    class="p-button-success rounded"
+                    (click)="addLocalitie()">
+                </p-button>
+            </div>
+        </div>
+
+        <p-table
+            [value]="localities ?? []"
+            [paginator]="true"
+            [rows]="10"
+            [tableStyle]="{ 'min-width': '30rem' }"
+            [globalFilterFields]="['name', 'type', 'typeName', 'countryId', 'areaId']"
+            stripedRows="true">
+
+            <ng-template #header>
+                <tr>
+                    <th>Id</th>
+                    <th>Country Id</th>
+                    <th>Area Id</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Type Name</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-data>
+                <tr>
+                    <td>{{ data.id }}</td>
+                    <td>{{ data.countryId }}</td>
+                    <td>{{ data.areaId }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.type }}</td>
+                    <td>{{ data.typeName }}</td>
+                    <td>{{ data.isActive }}</td>
+                    <td class="flex gap-1">
+                        <p-button
+                            icon="pi pi-pen-to-square"
+                            size="small"
+                            rounded
+                            text
+                            (click)="editLocalitie(data)">
+                        </p-button>
+
+                        <p-button
+                            icon="pi pi-trash"
+                            severity="warn"
+                            size="small"
+                            rounded
+                            text
+                            (click)="deleteLocalitie(data)">
+                        </p-button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+} @else {
+    <div class="flex items-center justify-center py-8">
+        <span class="text-2xl font-bold">No Localities found</span>
+    </div>
+}

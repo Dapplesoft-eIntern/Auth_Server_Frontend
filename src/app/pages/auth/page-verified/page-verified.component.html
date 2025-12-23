@@ -1,7 +1,7 @@
 <p-toast></p-toast>
+
 <div class="flex h-screen items-center justify-center bg-gray-100">
-    <div
-        class="h-[550px] w-full max-w-md items-center justify-center rounded bg-gray-100 p-10 shadow-xl">
+    <div class="h-[550px] w-full max-w-md rounded bg-gray-100 p-10 shadow-xl">
         <div class="mb-8 flex justify-center">
             <img
                 src="../../../../assets/images/image.png"
@@ -10,37 +10,50 @@
         </div>
 
         <div class="mb-6 pt-10 text-left">
-            <h2
-                class="text-lg font-bold tracking-wide text-gray-800 md:text-xl">
+            <h2 class="text-lg font-bold text-gray-800 md:text-xl">
                 Forget Password
             </h2>
-
-            <p class="mt-5 text-xs text-gray-500 md:text-sm">
-                Enter your mobile number for verification. We’ll send you a
-                4-digit verification code.
+            <p class="mt-4 text-xs text-gray-500 md:text-sm">
+                Enter your email or phone number. We’ll send you a 4-digit OTP.
             </p>
         </div>
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+
             <div>
-                <div class="pb-3 text-xs text-gray-500 md:text-sm">
-                    <label for="">Phone Number</label>
-                </div>
-                <p-inputMask
-                    id="phone"
-                    mask="99999999999"
-                    placeholder="Enter 11-digit phone number"
-                    formControlName="phone"
-                    (input)="onPhoneInput($event)"
-                    class="w-full items-center">
-                </p-inputMask>
+                <p-floatLabel class="w-full" variant="on">
+                    <input
+                        pInputText
+                        id="identifier"
+                        type="text"
+                        formControlName="identifier"
+                        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm text-gray-900 transition-all duration-200 hover:border-green-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200" />
+                    <label for="identifier">
+                        Email or Phone Number
+                    </label>
+                </p-floatLabel>
+
+                @if (submitted && f['identifier'].errors?.['required']) {
+                    <p class="mt-1 text-sm text-red-500">
+                        Email or phone number is required
+                    </p>
+                }
+
+                @if (submitted && f['identifier'].errors?.['invalidFormat']) {
+                    <p class="mt-1 text-sm text-red-500">
+                        Enter a valid email or 11-digit phone number
+                    </p>
+                }
             </div>
 
             <button
                 pButton
                 type="submit"
-                class="w-full rounded-md bg-blue-400 py-2 font-bold text-white transition hover:bg-blue-500">
-                Send OTP
+                label="Send OTP"
+                class="w-full rounded-md bg-blue-400 py-2 text-sm font-medium
+                       text-white transition-all duration-200
+                       hover:bg-blue-600 active:scale-[0.98]">
             </button>
         </form>
     </div>

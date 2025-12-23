@@ -1,41 +1,45 @@
-// import { Injectable } from '@angular/core'
-// import {
-//     FormBuilder,
-//     FormGroup,
-//     NonNullableFormBuilder,
-//     Validators,
-// } from '@angular/forms'
-// import { AbstractFormService } from '../common-service/lib/abstract-form.service'
-// import { Role, RoleDto } from './role.model'
-// import { RoleApiService } from './role-api.service'
+import { Injectable } from '@angular/core'
+import { FormGroup, NonNullableFormBuilder, Validators } from '@angular/forms'
+import { Role, RoleDto } from './role.model'
 
-// @Injectable({
-//     providedIn: 'root',
-// })
-// export class RoleFormService {
-//     form: FormGroup
-//     constructor(private fb: NonNullableFormBuilder) {
-//         this.form = this.buildForm()
-//     }
+@Injectable({
+    providedIn: 'root',
+})
+export class RoleFormService {
+    form: FormGroup
 
-//     buildForm(): FormGroup {
-//         const { required, minLength } = Validators
-//         return this.fb.group({
-//             Id: ['', [required]],
-//             roleName: ['', [required, minLength(3)]],
-//             description: ['', [required, minLength(3)]],
-//         })
-//     }
+    constructor(private fb: NonNullableFormBuilder) {
+        this.form = this.buildForm()
+    }
 
-//     controls(control: string) {
-//         return this.form.get(control)
-//     }
+    buildForm(): FormGroup {
+        const { required, minLength } = Validators
 
-//     getValue() {
-//         return this.form.getRawValue()
-//     }
+        return this.fb.group({
+            roleName: ['', [required, minLength(2)]],
+            description: ['', [required, minLength(3)]],
+        })
+    }
 
-//     patchForm(data: Role) {
-//         this.form.patchValue(data)
-//     }
-// }
+    controls(control: string) {
+        return this.form.get(control)
+    }
+
+    getValue(): RoleDto {
+        return this.form.getRawValue()
+    }
+
+    patchForm(role: Role) {
+        this.form.patchValue({
+            roleName: role.roleName,
+            description: role.description,
+        })
+    }
+
+    resetForm() {
+        this.form.reset({
+            roleName: '',
+            description: '',
+        })
+    }
+}

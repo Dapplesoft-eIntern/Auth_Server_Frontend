@@ -3,7 +3,6 @@
 <div
     class="flex min-h-screen items-center justify-center bg-gray-100 px-6 py-10">
     <div class="w-full max-w-md rounded bg-white p-10 shadow-2xl">
-        <!-- Logo -->
         <div class="mb-8 flex justify-center">
             <img src="../../../../assets/images/image.png" class="h-10" />
         </div>
@@ -14,7 +13,6 @@
             [formGroup]="signUpFormService.form"
             (ngSubmit)="onSubmit()"
             class="mt-6 space-y-3">
-            <!-- Full Name -->
             <div>
                 <common-form-input
                     controlName="fullName"
@@ -23,7 +21,6 @@
                 </common-form-input>
             </div>
 
-            <!-- Phone -->
             <div>
                 <common-form-input
                     controlName="phone"
@@ -31,7 +28,7 @@
                     type="tel">
                 </common-form-input>
             </div>
-            <!-- Email -->
+
             <div>
                 <common-form-input
                     controlName="email"
@@ -40,7 +37,6 @@
                 </common-form-input>
             </div>
 
-            <!-- Password -->
             <div>
                 <p-floatLabel class="w-full" variant="on">
                     <p-password
@@ -54,13 +50,17 @@
                     <label for="password">Enter your password</label>
                 </p-floatLabel>
 
-                @if (signUpFormService.form.get('password')?.touched && signUpFormService.getErrorMsg('password'); as msg) {
+                @if (
+                    signUpFormService.form.get('password')?.touched &&
+                        signUpFormService.getErrorMsg('password');
+                    as msg
+                ) {
                     <p class="mt-1 text-sm text-red-500">
                         {{ msg }}
                     </p>
                 }
             </div>
-            <!-- Confirm Password -->
+
             <div>
                 <p-floatLabel class="w-full" variant="on">
                     <p-password
@@ -74,35 +74,17 @@
                     <label for="confirmPassword">Confirm your password</label>
                 </p-floatLabel>
 
-                @if (signUpFormService.form.get('confirmPassword')?.touched && signUpFormService.getErrorMsg('confirmPassword'); as msg) {
+                @if (
+                    signUpFormService.form.get('confirmPassword')?.touched &&
+                        signUpFormService.getErrorMsg('confirmPassword');
+                    as msg
+                ) {
                     <p class="mt-1 text-sm text-red-500">
                         {{ msg }}
                     </p>
                 }
             </div>
-
-            <!-- Terms -->
-            <div class="flex items-center space-x-3">
-                <p-checkbox
-                    formControlName="acceptTerms"
-                    binary="true"></p-checkbox>
-                <span class="text-sm">
-                    I agree to the
-                    <a
-                        routerLink="/terms"
-                        class="text-blue-500 hover:underline">
-                        Terms & Conditions
-                    </a>
-                </span>
-            </div>
-
-            @if (signUpFormService.form.get('acceptTerms')?.hasError('required')) {
-                <p class="mt-1 text-sm text-red-500">
-                    Must agree with terms
-                </p>
-            }
-
-            <!-- Submit -->
+            
             @if (!loading) {
                 <button
                     pButton
@@ -117,7 +99,6 @@
             }
         </form>
 
-        <!-- Already have account -->
         <p class="mt-8 text-center text-sm text-gray-600">
             Already have an account?
             <a

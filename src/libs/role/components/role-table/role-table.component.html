@@ -1,57 +1,64 @@
-<!-- @let state = roleListStateService.selectAll() | async;
-@let loading = this.roleListStateService.select('loading') | async;
-@let twentyRoles = state?.roles;
+@let state = roleListStateService.selectAll() | async;
+@let loading = roleListStateService.select('loading') | async;
+@let roles = state?.roles;
+
 @if (loading) {
     <div class="flex items-center justify-center py-8">
         <i
             class="pi pi-spin pi-spinner"
             style="font-size: 2rem; color: green"></i>
     </div>
-} @else if (state?.roles?.length) {
-    <div
-        class="ronded-md max-h-[350px] overflow-scroll border border-gray-200 p-4">
+} @else if (roles?.length) {
+    <div class="max-h-[70vh] rounded-md">
+        <div
+            class="mb-4 flex flex-col items-center justify-between gap-4 md:flex-row">
+            <h2 class="text-xl font-bold">Roles Page</h2>
+
+            <div class="flex w-full items-center gap-2 md:w-auto">
+                <p-button
+                    label="Add Role"
+                    icon="pi pi-plus"
+                    (click)="addRole()"
+                    class="p-button-success rounded"></p-button>
+            </div>
+        </div>
+
         <p-table
-            [value]="twentyRoles ?? []"
-            [paginator]="false"
+            [value]="roles ?? []"
+            [paginator]="true"
+            [rows]="10"
             [tableStyle]="{ 'min-width': '30rem' }"
-            [globalFilterFields]="['roleName', 'decprition', 'id']"
-            [lazy]="true"
+            [globalFilterFields]="['roleName', 'description', 'id']"
             stripedRows="true">
             <ng-template #header>
                 <tr>
                     <th>Id</th>
                     <th>Role Name</th>
-                    <th>Decrription</th>
+                    <th>Description</th>
                     <th>Actions</th>
                 </tr>
             </ng-template>
+
             <ng-template #body let-data>
                 <tr>
-                    <td>
-                        {{ data.id }}
-                    </td>
-                    <td>
-                        {{ data.roleName.slice(0, 10) }}
-                    </td>
-                    <td>
-                        {{ data.decprition.slice(0, 20) }}
-                    </td>
-                    <td class="flex items-center justify-start gap-1">
+                    <td>{{ data.id }}</td>
+                    <td>{{ data.roleName }}</td>
+                    <td>{{ data.description | slice: 0 : 40 }}</td>
+                    <td class="flex gap-1">
                         <p-button
-                            styleClass="mb-2"
                             icon="pi pi-pen-to-square"
                             size="small"
-                            rounded="true"
-                            text="true"
-                            (click)="(data)" />
+                            rounded
+                            text
+                            (click)="editRole(data)" />
+
                         <p-button
-                            styleClass="mb-2"
-                            severity="warn"
                             icon="pi pi-trash"
+                            severity="warn"
                             size="small"
-                            [rounded]="true"
-                            [text]="true"
-                            (click)="(data)" />
+                            rounded
+                            text
+                            (click)="confirmDelete(data)" />
                     </td>
                 </tr>
             </ng-template>
@@ -61,4 +68,4 @@
     <div class="flex items-center justify-center py-8">
         <span class="text-2xl font-bold">No data found</span>
     </div>
-} -->
+}
