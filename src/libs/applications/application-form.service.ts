@@ -16,9 +16,15 @@ export class ApplicationFormService {
         const { required, minLength, pattern } = Validators
 
         return this.fb.group({
-            displayName: ['', [required, minLength(3), pattern(/^[A-Za-z]+(?: [A-Za-z]+)*$/)],],
+            displayName: [
+                '',
+                [required, minLength(3), pattern(/^[A-Za-z]+(?: [A-Za-z]+)*$/)],
+            ],
             clientId: ['', [required, minLength(6), pattern(/^[A-Za-z0-9]*$/)]],
-            clientSecret: ['', [required, minLength(10), pattern(/^[\x21-\x7E]+$/)]],
+            clientSecret: [
+                '',
+                [required, minLength(10), pattern(/^[\x21-\x7E]+$/)],
+            ],
             redirectUris: ['', [required]],
         })
     }
