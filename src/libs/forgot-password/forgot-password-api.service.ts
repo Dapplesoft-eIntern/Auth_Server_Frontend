@@ -1,35 +1,43 @@
 import { HttpClient } from '@angular/common/http'
-import { Inject, Injectable, inject } from '@angular/core'
+import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { ENVIRONMENT, EnvironmentConfig } from '../core'
+import { environment } from '../../environments/environment'
 import {
     ForgotPassword,
     ForgotPasswordRequestDto,
 } from './forgot-password.model'
 
+export interface OtpResponse {
+    success: boolean
+    message: string
+}
+
+export interface OtpVerificationResponse {
+    isValid: boolean
+    message?: string
+}
+
 @Injectable({
     providedIn: 'root',
 })
 export class ForgotPasswordApiService {
-    private http = inject(HttpClient)
+    private env = environment
 
-    constructor(
-        @Inject(ENVIRONMENT)
-        private env: EnvironmentConfig,
-    ) {}
+    constructor(private http: HttpClient) {}
 
-    // Send OTP for password reset
-    sendOtp(email: string): Observable<any> {
-        return this.http.post<any>(
+    sendOtp(email: string): Observable<OtpResponse> {
+        return this.http.post<OtpResponse>(
             `${this.env.apiUrl}/CommonOtp/SendOtp`,
             { input: email },
             { headers: { 'Content-Type': 'application/json' } },
         )
     }
 
-    // Verify OTP for password reset
-    verifyOtp(email: string, otpToken: string): Observable<any> {
-        return this.http.post<any>(
+    verifyOtp(
+        email: string,
+        otpToken: string,
+    ): Observable<OtpVerificationResponse> {
+        return this.http.post<OtpVerificationResponse>(
             `${this.env.apiUrl}/Otp/Verify`,
             {
                 input: email,
@@ -39,7 +47,6 @@ export class ForgotPasswordApiService {
         )
     }
 
-    // Reset password after OTP verification
     resetPassword(
         request: ForgotPasswordRequestDto,
     ): Observable<ForgotPassword> {

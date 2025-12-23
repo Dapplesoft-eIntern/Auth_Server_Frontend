@@ -83,9 +83,7 @@ export class ForgotPasswordStateService extends SimpleStore<ForgotPasswordState>
                 })
                 return throwError(() => error)
             }),
-            finalize(() => {
-                this.setState({ loading: false })
-            }),
+            // Remove redundant finalize
         )
     }
 
@@ -136,10 +134,17 @@ export class ForgotPasswordStateService extends SimpleStore<ForgotPasswordState>
                 })
                 return throwError(() => error)
             }),
-            finalize(() => {
-                this.setState({ loading: false })
-            }),
+            // Remove redundant finalize
         )
+    }
+
+    // Mark OTP as verified (for use when OTP is verified elsewhere)
+    markOtpAsVerified() {
+        this.setState({
+            otpVerified: true,
+            error: false,
+            errorMessage: null,
+        })
     }
 
     // Reset password
@@ -154,12 +159,22 @@ export class ForgotPasswordStateService extends SimpleStore<ForgotPasswordState>
             return throwError(() => new Error('OTP verification required'))
         }
 
-        if (!email || !newPassword || !confirmPassword) {
+        if (!email) {
             this.setState({
                 error: true,
-                errorMessage: 'All fields are required',
+                errorMessage: 'Email is required',
             })
-            return throwError(() => new Error('All fields are required'))
+            return throwError(() => new Error('Email is required'))
+        }
+
+        if (!newPassword || !confirmPassword) {
+            this.setState({
+                error: true,
+                errorMessage: 'Password fields cannot be empty',
+            })
+            return throwError(
+                () => new Error('Password fields cannot be empty'),
+            )
         }
 
         if (newPassword !== confirmPassword) {
@@ -213,9 +228,7 @@ export class ForgotPasswordStateService extends SimpleStore<ForgotPasswordState>
                 })
                 return throwError(() => error)
             }),
-            finalize(() => {
-                this.setState({ loading: false })
-            }),
+            // Remove redundant finalize
         )
     }
 

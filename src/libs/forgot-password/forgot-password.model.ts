@@ -1,7 +1,7 @@
 export interface ForgotPasswordRequestDto {
     email: string
     newPassword: string
-    confirmPassword: string
+    //confirmPassword: string;
 }
 
 export interface ForgotPasswordResponse {

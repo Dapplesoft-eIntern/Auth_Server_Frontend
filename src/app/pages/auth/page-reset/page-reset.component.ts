@@ -12,7 +12,7 @@ import { ButtonModule } from 'primeng/button'
 import { PasswordModule } from 'primeng/password'
 import { ToastModule } from 'primeng/toast'
 import { ForgotPasswordStateService } from '../../../../libs/forgot-password/forgot-password-state.service'
-import { OtpStateService } from '../../../../libs/otp/otp-state.service' // Keep for email transfer
+import { OtpStateService } from '../../../../libs/otp/otp-state.service'
 
 @Component({
     selector: 'app-reset',
@@ -29,7 +29,6 @@ import { OtpStateService } from '../../../../libs/otp/otp-state.service' // Keep
 })
 export class PageResetComponent implements OnInit {
     resetForm: FormGroup
-    loading = false
     email = ''
 
     private forgotPasswordStateService = inject(ForgotPasswordStateService)
@@ -47,6 +46,11 @@ export class PageResetComponent implements OnInit {
             },
             { validators: this.passwordMatchValidator },
         )
+    }
+
+    // Use getter for loading state from service
+    get loading(): boolean {
+        return this.forgotPasswordStateService.isLoading()
     }
 
     ngOnInit() {
@@ -80,24 +84,19 @@ export class PageResetComponent implements OnInit {
                 detail: 'Email not found. Please restart the password reset process.',
                 life: 3000,
             })
-            setTimeout(() => this.router.navigate(['/verified']), 3000)
+            setTimeout(() => this.router.navigate(['/verified']), 3000) // Fixed: Navigate to /verified
             return
         }
 
         // Transfer email to ForgotPasswordStateService
         this.forgotPasswordStateService.setEmail(this.email)
-        // Manually set OTP as verified in the ForgotPasswordStateService
-        this.setOtpVerifiedInForgotPasswordState()
+        // Mark OTP as verified in the ForgotPasswordStateService
+        this.markOtpAsVerified()
     }
 
-    private setOtpVerifiedInForgotPasswordState() {
-        // Since ForgotPasswordStateService tracks OTP verification separately,
-        // we need to manually set it as verified
-        const currentState = this.forgotPasswordStateService['getState']()
-        this.forgotPasswordStateService['setState']({
-            ...currentState,
-            otpVerified: true,
-        })
+    private markOtpAsVerified() {
+        // Use the public method from ForgotPasswordStateService
+        this.forgotPasswordStateService.markOtpAsVerified()
     }
 
     passwordMatchValidator(group: FormGroup) {
@@ -124,8 +123,6 @@ export class PageResetComponent implements OnInit {
             return
         }
 
-        this.loading = true
-
         // Use ForgotPasswordStateService to reset password
         this.forgotPasswordStateService
             .resetPassword(
@@ -134,8 +131,6 @@ export class PageResetComponent implements OnInit {
             )
             .subscribe({
                 next: () => {
-                    this.loading = false
-
                     if (this.forgotPasswordStateService.isResetCompleted()) {
                         this.onResetSuccess()
                     } else {
@@ -151,7 +146,6 @@ export class PageResetComponent implements OnInit {
                     }
                 },
                 error: (error) => {
-                    this.loading = false
                     this.handleError(error)
                 },
             })
@@ -236,6 +230,7 @@ export class PageResetComponent implements OnInit {
     }
 
     goBackToOtp() {
+        // Navigate back to OTP verification page
         this.router.navigate(['/verifiedotp'])
     }
 }
