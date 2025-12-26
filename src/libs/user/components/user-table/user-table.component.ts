@@ -50,9 +50,7 @@ export class UserTableComponent {
         })
 
         ref?.onClose.subscribe((user) => {
-            if (user) {
-                this.userListStateService.pushUser(user)
-            }
+            this.userListStateService.replaceUser(user)
         })
     }
 

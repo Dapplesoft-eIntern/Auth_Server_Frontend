@@ -74,7 +74,7 @@ export const dashboardRoutes: DashboardRoutes = {
         path: 'admin/audit-logs',
         loadComponent: () =>
             import('./page-auditLogs/page-auditLogs.component').then(
-                (m) => m.PageAuditLogsRoutesComponent,
+                (m) => m.PageAuditLogsComponent,
             ),
         resolve: { layout: setLayout(PageLayout.Dashboard) },
     },

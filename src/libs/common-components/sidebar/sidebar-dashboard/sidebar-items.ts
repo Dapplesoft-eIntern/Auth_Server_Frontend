@@ -35,7 +35,7 @@ export const navItems = [
         label: 'Tokens',
     },
     {
-        routerLink: 'admin/auditlogs',
+        routerLink: 'admin/audit-logs',
         icon: 'pi pi-list',
         label: 'Audit Logs',
     },
