@@ -115,4 +115,19 @@ export class ApplicationModalComponent {
                 },
             })
     }
+
+    generateSecret(length = 30) {
+        const charset =
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#%&*-'
+        let result = ''
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * charset.length)
+            result += charset[randomIndex]
+        }
+        this.appFormService.form.get('clientSecret')?.setValue(result)
+        // Keep Copy
+        navigator.clipboard.writeText(result).then(() => {
+            console.log('Secret copied to clipboard!')
+        })
+    }
 }

@@ -27,7 +27,7 @@ export class ApplicationTableComponent {
 
         ref?.onClose.subscribe((application) => {
             if (application) {
-                this.appListStateService.init()
+                this.appListStateService.pushApplication(application)
             }
         })
     }
