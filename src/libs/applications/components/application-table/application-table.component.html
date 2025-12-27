@@ -3,6 +3,7 @@
 @let applications = state?.applications ?? [];
 @let selectedApps = state?.selectedApps ?? [];
 
+<p-confirmdialog></p-confirmdialog>
 <div class="max-h-[70vh] rounded-md">
     <div
         class="mb-4 flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -87,7 +88,7 @@
                         severity="danger"
                         [rounded]="true"
                         [outlined]="true"
-                        (click)="confirmDelete(data)" />
+                        (click)="confirmDeleteApplication(data)" />
                 </td>
             </tr>
         </ng-template>

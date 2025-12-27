@@ -85,17 +85,19 @@ export class ApplicationModalComponent {
     }
 
     private createApplication(application: ApplicationDto) {
+        this.isLoading.set(false)
         this.appApiService.createApplication(application).subscribe({
             next: (res) => {
                 this.isLoading.set(false)
                 this.ref.close(res)
-                this.alertService.success('Project created successfully')
+                this.alertService.success('Application updated successfully')
             },
             error: () => {
                 this.isLoading.set(false)
-                this.alertService.error('Failed to create project')
+                this.alertService.error('Failed to create Application')
             },
         })
+        this.ref.close({ data: application, mode: 'create' })
     }
 
     private updateApplication(application: ApplicationDto) {
