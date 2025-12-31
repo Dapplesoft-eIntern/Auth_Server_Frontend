@@ -85,6 +85,14 @@
                         {{ msg }}
                     </p>
                 }
+                @if (
+                    signUpFormService.form.hasError('passwordMismatch') &&
+                    signUpFormService.form.get('confirmPassword')?.touched
+                ) {
+                    <p class="mt-1 text-sm text-red-500">
+                        Passwords do not match.
+                    </p>
+                }
             </div>
 
             @if (!loading) {
